@@ -86,3 +86,108 @@
 	<string>
 	<iostream>
 
+1382986810 source:c:\users\sabina\git\bunny\element.cpp
+	"Element.h"
+
+1382986439 c:\users\sabina\git\bunny\element.h
+	"main.h"
+	<stdlib.h>
+	<stdio.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<Math.h>
+	"Room.h"
+
+1384184604 c:\users\sabina\git\bunny\main.h
+
+1382967565 c:\users\sabina\git\bunny\room.h
+	<string>
+	<iostream>
+
+1384204482 source:c:\users\sabina\git\bunny\game.cpp
+	"Game.h"
+
+1384201559 c:\users\sabina\git\bunny\game.h
+	<allegro5/allegro.h>
+	<string>
+	<vector>
+	"main.h"
+	"ActualGame.h"
+	"Subgame.h"
+	"Menu.h"
+
+1382797414 c:\users\sabina\git\bunny\level.h
+	"Button.h"
+	"main.h"
+	<string>
+
+1384203283 c:\users\sabina\git\bunny\button.h
+	<allegro5/allegro_primitives.h>
+	"Delegate.h"
+
+1384203647 c:\users\sabina\git\bunny\menu.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<iostream>
+	<vector>
+	"Button.h"
+	"Subgame.h"
+	"Delegate.h"
+
+1383049577 c:\users\sabina\git\bunny\panda.h
+	"Element.h"
+	"Room.h"
+
+1384203386 source:c:\users\sabina\git\bunny\level.cpp
+	"Level.h"
+	<stdlib.h>
+	<stdio.h>
+	<iostream>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+
+1384203647 source:c:\users\sabina\git\bunny\menu.cpp
+	"Menu.h"
+
+1384199916 source:c:\users\sabina\git\bunny\panda.cpp
+	"Panda.h"
+	<string>
+
+1382967975 source:c:\users\sabina\git\bunny\room.cpp
+	"Room.h"
+
+1384204482 source:c:\users\sabina\git\bunny\main.cpp
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<string>
+	"main.h"
+	"game.h"
+
+1384204482 source:c:\users\sabina\git\bunny\button.cpp
+	"Button.h"
+
+1384199916 source:c:\users\sabina\git\bunny\actualgame.cpp
+	"ActualGame.h"
+	<string>
+
+1384200131 c:\users\sabina\git\bunny\actualgame.h
+	"main.h"
+	<vector>
+	"Panda.h"
+	"Element.h"
+	"Menu.h"
+	"Level.h"
+
+1384203647 c:\users\sabina\git\bunny\subgame.h
+	<allegro5/allegro.h>
+
+1384192494 source:c:\users\sabina\git\bunny\subgame.cpp
+	"Subgame.h"
+
+1384202011 c:\users\sabina\git\bunny\delegate.h
+

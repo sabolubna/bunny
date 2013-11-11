@@ -1,17 +1,8 @@
 #include "Button.h"
 
-Button::Button()
-{
+Button::Button() {}
 
-}
-
-Button::Button(int x, int y, int w, int h)
-{
-    posx = x;
-    posy = y;
-    width = w;
-    height = h;
-}
+Button::Button(Delegate* delegate, int x, int y, int w, int h) : posx(x), posy(y), width(w), height(h) {}
 
 bool Button::clicked(int x, int y)
 {

@@ -2,12 +2,13 @@
 #define BUTTON_H
 
 #include <allegro5/allegro_primitives.h>
+#include "Delegate.h"
 
 class Button
 {
     public:
         Button();
-        Button(int x, int y, int h, int w);
+        Button(Delegate* delegate_, int x, int y, int h, int w);
         virtual ~Button();
         bool clicked(int x, int y);
         void draw(ALLEGRO_COLOR color);

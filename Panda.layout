@@ -8,13 +8,13 @@
 		<Cursor position="36" topLine="0" />
 	</File>
 	<File name="Element.cpp" open="1" top="0" tabpos="7">
-		<Cursor position="1132" topLine="21" />
+		<Cursor position="1132" topLine="12" />
 	</File>
 	<File name="Element.h" open="1" top="0" tabpos="6">
-		<Cursor position="529" topLine="7" />
+		<Cursor position="529" topLine="16" />
 	</File>
-	<File name="Game.cpp" open="1" top="1" tabpos="3">
-		<Cursor position="571" topLine="0" />
+	<File name="Game.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="571" topLine="26" />
 	</File>
 	<File name="Game.h" open="1" top="0" tabpos="2">
 		<Cursor position="560" topLine="0" />
@@ -43,8 +43,8 @@
 	<File name="Room.h" open="1" top="0" tabpos="15">
 		<Cursor position="72" topLine="5" />
 	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="1359" topLine="42" />
+	<File name="main.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="3037" topLine="0" />
 	</File>
 	<File name="main.h" open="1" top="0" tabpos="12">
 		<Cursor position="149" topLine="0" />

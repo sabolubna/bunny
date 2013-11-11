@@ -3,21 +3,26 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <iostream>
+#include <vector>
 #include "Button.h"
+#include "Subgame.h"
+#include "Delegate.h"
 
-class Menu
+using namespace std;
+
+class Menu : public Subgame
 {
     public:
-        Menu();
-        Menu(char bitmap[15], Button *butts, int cnt);
+        Menu(char bitmap[15], vector<Button> buttons);
         ~Menu();
-        void view();
+        void draw();
         int clicked(int x, int y);
+        void dispatchEvent(ALLEGRO_EVENT *event);
 
     private:
-        Button *buttons;
-        int butcnt;
-        ALLEGRO_BITMAP *screen, *instr;
+        vector<Button> buttons_;
+        ALLEGRO_BITMAP *screen;
 };
 
 #endif // MENU_H

@@ -7,6 +7,8 @@
 #define LVL_CNT 2
 #define BUTTON 20
 
+enum GameState {MENU, PLAYING, PAUSE};
+
 using namespace std;
 
 #endif // MAIN_H_INCLUDED

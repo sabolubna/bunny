@@ -14,7 +14,7 @@ Level::Level()
 Level::Level(string nam, int x, int y, bool av, bool reqit[ITEM_CNT], int reqgr[GRADE_CNT], char background[16])
 {
     name = nam;
-    button = Button(x, y, BUTTON, BUTTON);
+    //button = Button(x, y, BUTTON, BUTTON);
     available = av;
     for (int i = 0; i < ITEM_CNT; i++)
         requireditems[i] = reqit[i];

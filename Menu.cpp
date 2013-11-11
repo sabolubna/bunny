@@ -1,15 +1,10 @@
 #include "Menu.h"
 
-Menu::Menu()
-{
 
-}
-
-Menu::Menu(char bitmap[15], Button *butts, int cnt)
+Menu::Menu(char bitmap[15], vector<Button> buttons)
 {
-    butcnt = cnt;
     screen = al_load_bitmap(bitmap);
-    buttons = butts;
+    buttons_ = buttons;
 }
 
 Menu::~Menu()
@@ -17,22 +12,22 @@ Menu::~Menu()
     //dtor
 }
 
-void Menu::view()
+void Menu::dispatchEvent(ALLEGRO_EVENT *event)
 {
-    al_draw_bitmap(screen, 0, 0, 0);
-    for (int i = 0; i < butcnt; i++)
+    if (event->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
     {
-        buttons[i].draw(al_map_rgb(255,255,255));
+        int x, y;
+        x = event->mouse.x;
+        y = event->mouse.y;
     }
-    al_flip_display();
 }
 
-int Menu::clicked(int x, int y)
+void Menu::draw()
 {
-    for (int i = 0; i < butcnt; i++)
+    al_draw_bitmap(screen, 0, 0, 0);
+    for (int i = 0; i < buttons_.size(); i++)
     {
-        if (buttons[i].clicked(x, y))
-            return i;
+        buttons_[i].draw(al_map_rgb(255,255,255));
     }
-    return -1;
+    al_flip_display();
 }

@@ -1,54 +1,27 @@
 #include "Game.h"
 
+
 Game::Game()
-// creates new game
 {
-    panda = Panda();
-    queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_mouse_event_source());
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    Button *buttons;
-    buttons = new Button[4];
-    buttons[0] = Button(350, 150, 100, 50);
-    buttons[1] = Button(350, 250, 100, 50);
-    buttons[2] = Button(350, 350, 100, 50);
-    buttons[3] = Button(350, 450, 100, 50);
-    pausemenu = Menu("pics/level02.bmp", buttons, 4);
-    time = 0;
-    date = 1;
-    hp = 10;
-    hearts = 5;
-    state = 0;
-    map = al_load_bitmap("pics/map.png");
-    std::fstream fp;
-    fp.open( "files/levels.txt", std::ios::in);
-    if(!fp.good())
-        cout << "Problem z dostepem do pliku levels.txt" << std::endl;
-    for (int i = 0; i < LVL_CNT; i++)
-    {
-        string name;
-        fp >> name;
-        int x, y;
-        fp >> x;
-        fp >> y;
-        bool av, reqit[ITEM_CNT];
-        fp >> av;
-        for (int j = 0; j < ITEM_CNT; j++)
-            fp >> reqit[j];
-        int reqgr[GRADE_CNT];
-        for (int j = 0; j < GRADE_CNT; j++)
-            fp >> reqgr[j];
-        char backgr[11];
-        fp >> backgr;
-        levels[i] = Level(name, x, y, av, reqit, reqgr, backgr);
-    }
-    fp.close();
-    currentlvl = NULL;
-}
+    running_ = true;
 
-Game::Game(int fp)
-{
+    vector<Button> buttons;
+    buttons.push_back(Button(this, 50, 50, 300, 50));
+    buttons.push_back(Button(this, 50, 150, 300, 50));
+    buttons.push_back(Button(this, 50, 250, 300, 50));
+    buttons.push_back(Button(this, 50, 350, 300, 50));
+    mainmenu_ = new Menu("pics/mainmenu.jpg", buttons);
+    mainmenu_->draw();
 
+    buttons.clear();
+    buttons.push_back(Button(this, 350, 150, 100, 50));
+    buttons.push_back(Button(this, 350, 250, 100, 50));
+    buttons.push_back(Button(this, 350, 350, 100, 50));
+    buttons.push_back(Button(this, 350, 450, 100, 50));
+    pausemenu_ = new Menu("pics/level02.bmp", buttons);
+
+    subgame_ = mainmenu_;
+    GameState state_ = MENU;
 }
 
 Game::~Game()
@@ -56,21 +29,54 @@ Game::~Game()
     //dtor
 }
 
-void Game::timePass()
+void Game::quit()
 {
-    time+=1;
-    if (time == MAX_TIME)
-    {
-        time = 0;
-        date++;
-    }
-    return;
+    running_ = false;
 }
 
-void Game::dayPass()
+bool Game::isRunning()
 {
-    time = 0;
-    date++;
+    return running_;
+}
+
+void Game::dispatchEvent(ALLEGRO_EVENT *event)
+{
+    subgame_->dispatchEvent(event);
+}
+/*void Game::menuEvent(ALLEGRO_EVENT *event)
+{
+    if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+        {
+
+            int click = menu.clicked(posx, posy);
+            if (click >= 0)
+            {
+                switch (click)
+                {
+                    case 0:
+                    {
+                        state = PLAYING;
+                        game.newGame();
+                        break;
+                    }
+                    case 1:
+                    {
+                        //continue
+                        break;
+                    }
+                    case 2:
+                    {
+                        //about
+                        break;
+                    }
+                    case 3:
+                    {
+                        playing = false;
+                        break;
+                    }
+                }
+            }
+        }
 }
 
 void Game::screen()
@@ -79,13 +85,7 @@ void Game::screen()
     {
         case 0:
         {
-            al_draw_bitmap(map, 0, 0, 0);
-            for (int i = 0; i < LVL_CNT; i++)
-            {
-                levels[i].drawButton();
-            }
-            if (currentlvl != NULL)
-                currentlvl->viewInfo();
+            mainmenu.draw();
             break;
         }
         case 1:
@@ -96,6 +96,12 @@ void Game::screen()
             {
                 elements[i]->draw();
             }
+            break;
+        }
+        case 2:
+        {
+            pause.draw();
+            break;
         }
     }
     al_flip_display();
@@ -274,3 +280,4 @@ void Game::play()
     cout << "end play" << endl;
     al_destroy_event_queue(queue);
 }
+*/
