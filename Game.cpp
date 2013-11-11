@@ -1,23 +1,32 @@
 #include "Game.h"
+#include "Button.h"
 
+class QuitClickHandler : public Button::ClickHandler
+{
+    public:
+        QuitClickHandler(Game* game): game_(game) {}
+        virtual void onClick() { game_->quit(); }
+    private:
+        Game* game_;
+};
 
 Game::Game()
 {
     running_ = true;
 
     vector<Button> buttons;
-    buttons.push_back(Button(this, 50, 50, 300, 50));
-    buttons.push_back(Button(this, 50, 150, 300, 50));
-    buttons.push_back(Button(this, 50, 250, 300, 50));
-    buttons.push_back(Button(this, 50, 350, 300, 50));
+    buttons.push_back(Button(new QuitClickHandler(this), 50, 50, 300, 50));
+    //buttons.push_back(Button(this, 50, 150, 300, 50));
+    //buttons.push_back(Button(this, 50, 250, 300, 50));
+    //buttons.push_back(Button(this, 50, 350, 300, 50));
     mainmenu_ = new Menu("pics/mainmenu.jpg", buttons);
     mainmenu_->draw();
 
     buttons.clear();
-    buttons.push_back(Button(this, 350, 150, 100, 50));
-    buttons.push_back(Button(this, 350, 250, 100, 50));
-    buttons.push_back(Button(this, 350, 350, 100, 50));
-    buttons.push_back(Button(this, 350, 450, 100, 50));
+    //buttons.push_back(Button(this, 350, 150, 100, 50));
+    //buttons.push_back(Button(this, 350, 250, 100, 50));
+    //buttons.push_back(Button(this, 350, 350, 100, 50));
+    //buttons.push_back(Button(this, 350, 450, 100, 50));
     pausemenu_ = new Menu("pics/level02.bmp", buttons);
 
     subgame_ = mainmenu_;

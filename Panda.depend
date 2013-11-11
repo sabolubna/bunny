@@ -104,10 +104,11 @@
 	<string>
 	<iostream>
 
-1384204482 source:c:\users\sabina\git\bunny\game.cpp
+1384208066 source:c:\users\sabina\git\bunny\game.cpp
 	"Game.h"
+	"Button.h"
 
-1384201559 c:\users\sabina\git\bunny\game.h
+1384208017 c:\users\sabina\git\bunny\game.h
 	<allegro5/allegro.h>
 	<string>
 	<vector>
@@ -121,7 +122,7 @@
 	"main.h"
 	<string>
 
-1384203283 c:\users\sabina\git\bunny\button.h
+1384208845 c:\users\sabina\git\bunny\button.h
 	<allegro5/allegro_primitives.h>
 	"Delegate.h"
 
@@ -168,7 +169,7 @@
 	"main.h"
 	"game.h"
 
-1384204482 source:c:\users\sabina\git\bunny\button.cpp
+1384208845 source:c:\users\sabina\git\bunny\button.cpp
 	"Button.h"
 
 1384199916 source:c:\users\sabina\git\bunny\actualgame.cpp
@@ -189,5 +190,5 @@
 1384192494 source:c:\users\sabina\git\bunny\subgame.cpp
 	"Subgame.h"
 
-1384202011 c:\users\sabina\git\bunny\delegate.h
+1384207604 c:\users\sabina\git\bunny\delegate.h
 

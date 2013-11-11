@@ -11,3 +11,4 @@ class Delegate
 };
 
 #endif // DELEGATE_H
+

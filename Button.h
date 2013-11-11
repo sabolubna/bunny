@@ -7,14 +7,22 @@
 class Button
 {
     public:
+        class ClickHandler
+        {
+            public:
+                virtual void onClick() = 0;
+                virtual ~ClickHandler() {}
+        };
         Button();
-        Button(Delegate* delegate_, int x, int y, int h, int w);
+        Button(ClickHandler* handler, int x, int y, int h, int w);
         virtual ~Button();
         bool clicked(int x, int y);
         void draw(ALLEGRO_COLOR color);
+        void onClick();
 
     protected:
-        int posx, posy, height, width;
+        ClickHandler* handler_;
+        int posx_, posy_, height_, width_;
 
     private:
 };

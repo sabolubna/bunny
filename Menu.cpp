@@ -19,6 +19,14 @@ void Menu::dispatchEvent(ALLEGRO_EVENT *event)
         int x, y;
         x = event->mouse.x;
         y = event->mouse.y;
+        for (int i = 0; i < buttons_.size(); i++)
+        {
+            if (buttons_[i].clicked(x, y))
+            {
+                buttons_[i].onClick();
+                return;
+            }
+        }
     }
 }
 
