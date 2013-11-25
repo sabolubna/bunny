@@ -1,36 +1,29 @@
 #ifndef ACTUALGAME_H
 #define ACTUALGAME_H
 
-class Game;
-
+#include <string>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 #include "main.h"
 #include <vector>
-#include "Panda.h"
+#include "Bunny.h"
 #include "Element.h"
-#include "Menu.h"
 #include "Level.h"
+#include "Room.h"
+#include "Subgame.h"
 
 class ActualGame : public Subgame
 {
     public:
-        ActualGame();
+        ActualGame(Delegate* delegate);
         ~ActualGame();
+        void dispatchEvent(ALLEGRO_EVENT *event);
+        void nextLevel();
     protected:
-        void dispatchEvent(Game* game, ALLEGRO_EVENT *event);
-        Panda panda;
-        vector<Element*> elements;
-        GameState state;
-        //Room *currentroom;
-        Level *currentlvl;
-        Level levels[LVL_CNT];
-        bool items[ITEM_CNT];
-        ALLEGRO_BITMAP *itempics;
-
-        void sort();
-        void save();
-        void screen();
-        void fight();
-        int pause();
+        Delegate* delegate_;
+        Bunny* bunny_;
+        Level* level_;
+        bool usedlevels_[LEVELTYPES];
     private:
 };
 

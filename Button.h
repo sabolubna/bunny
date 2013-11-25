@@ -2,7 +2,6 @@
 #define BUTTON_H
 
 #include <allegro5/allegro_primitives.h>
-#include "Delegate.h"
 
 class Button
 {

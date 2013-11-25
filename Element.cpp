@@ -1,63 +1,59 @@
 #include "Element.h"
 
-Element::Element()
-{
-    //ctor
-}
-
 Element::~Element()
 {
     //dtor
 }
 
-int Element::compareTo(Element that)
+void Element::dispatchEvent(ALLEGRO_EVENT* event)
 {
-    if (this->posy > that.posy) return 1;
-    if (this->posy < that.posy) return -1;
-    if (this->posy < that.posy) return -1;
-    if (this->posy > that.posy) return 1;
-    return 0;
+
 }
 
-bool Element::collides(Element that)
+bool Element::lessThan(Element* that)
 {
-    return (this->posx + this->length > that.posx
-        && this->posx < that.posx + that.length
-        && this->posy > that.posy - that.width
-        && this->posy - this->width < that.posy);
+    return posy_ < that->posy_;
 }
 
-void Element::wall(Room* room)
+void Element::bounceFromWall(int borders[4])
 {
-    if (posx < room->leftborder) posx = room->leftborder+1;
-    if (posx + length > room->rightborder) posx = room->rightborder-1-length;
-    if (posy > room->downborder) posy = room->downborder - 1;
-    if (posy - width < room->upborder) posy = room->upborder+1+width;
+    if (posx_ < borders[LEFT])
+        posx_ = borders[LEFT] + 1;
+    if (posx_ + width_ > borders[RIGHT])
+        posx_ = borders[RIGHT] - 1 - width_;
+    if (posy_ > borders[DOWN])
+        posy_ = borders[DOWN] - 1;
+    if (posy_ - height_ < borders[UP])
+        posy_ = borders[UP] + 1 + height_;
 }
 
-void Element::changeSpeed(int x, int y)
+void Element::changeSpeedBy(int x, int y)
 {
-    speedx += x;
-    speedy += y;
+    speedx_ += x;
+    speedy_ += y;
 }
 
 void Element::setSpeed(int x, int y)
 {
-    speedx = x;
-    speedy = y;
+    speedx_ = x;
+    speedy_ = y;
 }
 
 void Element::move()
 {
-    if (speedx == 0 && speedy == 0) return;
-    double sq = sqrt(pow(speedx,2)+pow(speedy,2));
-    posx += 1.0 * speedx * step / sq;
-    posy += 1.0 * speedy * step / sq;
+    if (speedx_ == 0 && speedy_ == 0) return;
+    double sq = sqrt(pow(speedx_,2)+pow(speedy_,2));
+    posx_ += 1.0 * speedx_ * step_ / sq;
+    posy_ += 1.0 * speedy_ * step_ / sq;
 }
 
 void Element::draw()
 {
-    al_draw_bitmap(picture, posx, posy - height - posz, 0);
+    al_draw_bitmap(picture_, posx_, posy_ - pic_height_ - posz_, 0);
 }
 
-
+bool Element::collidesWith(Element* that)
+{
+    return (posx_ + width_ > that->posx_ && posx_ < that->posx_ + that->width_
+        && posy_ > that->posy_ - that->height_ && posy_ - height_ < that->posy_);
+}

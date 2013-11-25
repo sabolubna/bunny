@@ -2,7 +2,7 @@
 
 Button::Button() {}
 
-Button::Button(ClickHandler* handler_, int x, int y, int w, int h) : posx_(x), posy_(y), width_(w), height_(h) {};
+Button::Button(ClickHandler* handler, int x, int y, int w, int h) : handler_(handler), posx_(x), posy_(y), width_(w), height_(h) {};
 
 bool Button::clicked(int x, int y)
 {

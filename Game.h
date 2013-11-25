@@ -16,7 +16,11 @@ class Game : public Delegate
         ~Game();
         bool isRunning();
         void dispatchEvent(ALLEGRO_EVENT *event);
+        void play();
         void quit();
+        void onPause();
+        void resume();
+        void endGame();
 
     private:
         bool running_;

@@ -38,6 +38,7 @@ int main()
     al_register_event_source(queue, al_get_mouse_event_source());
     al_register_event_source(queue, al_get_keyboard_event_source());
     Game game = Game();
+
     // main loop
     while (game.isRunning())
     {

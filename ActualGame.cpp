@@ -1,10 +1,18 @@
 #include "ActualGame.h"
-#include <string>
+
 
 using namespace std;
 
-ActualGame::ActualGame()
+ActualGame::ActualGame(Delegate* delegate)
 {
+    bunny_ = new Bunny();
+    delegate_ = delegate;
+    int r = rand()%LEVELTYPES;
+    for (int i = 0; i < LEVELTYPES; i++)
+        usedlevels_[i] = false;
+    usedlevels_[r] = true;
+    level_ = new Level(r, bunny_);
+    //level_->currentRoom_->enter();
 }
 
 ActualGame::~ActualGame()
@@ -12,7 +20,36 @@ ActualGame::~ActualGame()
     //dtor
 }
 
-void ActualGame::dispatchEvent(Game* game, ALLEGRO_EVENT *event)
+void ActualGame::nextLevel()
 {
-    return;
+    int r;
+    do
+    {
+        r = rand()%LEVELTYPES;
+    } while (usedlevels_[r]);
+    usedlevels_[r] = true;
+    level_ = new Level(r, bunny_);
+}
+
+void ActualGame::dispatchEvent(ALLEGRO_EVENT *event)
+{
+    if (event->type == ALLEGRO_EVENT_TIMER)
+    {
+        level_->dispatchEvent(event);
+        al_flip_display();
+    }
+    else if (event->type == ALLEGRO_EVENT_KEY_DOWN
+        && event->keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+    {
+        delegate_->onPause();
+    }
+    else if (event->type == ALLEGRO_EVENT_KEY_DOWN
+        || event->type == ALLEGRO_EVENT_KEY_UP)
+    {
+        bunny_->dispatchEvent(event);
+    }
+    else
+    {
+        level_->dispatchEvent(event);
+    }
 }

@@ -1,31 +1,28 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "Button.h"
 #include "main.h"
+#include "Room.h"
 #include <string>
+#include <iostream>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
 class Level
 {
+    friend class ActualGame;
     public:
-        string name;
-        Level();
-        Level(string nam, int x, int y, bool av, bool reqit[ITEM_CNT], int reqgr[GRADE_CNT],
-              char background[16]);
+        Level(int levelnum, Bunny* bunny);
         ~Level();
-        void viewInfo();
-        void drawButton();
-        bool clicked(int x, int y);
-        bool unlocked();
-        void drawScreen();
+        void dispatchEvent(ALLEGRO_EVENT* event);
+        void enter(Room* room);
+        void draw();
 
     protected:
-        //Room *firstroom;
-        Button button;
-        bool available;
-        bool requireditems[ITEM_CNT];
-        int requiredgrades[GRADE_CNT];
-        ALLEGRO_BITMAP *background;
+        ALLEGRO_BITMAP *background_, *numbers_, *hearts_;
+        Room* firstRoom_;
+        Room* currentRoom_;
+        Bunny* bunny_;
 
     private:
 };

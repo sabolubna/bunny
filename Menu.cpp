@@ -1,10 +1,11 @@
 #include "Menu.h"
 
 
-Menu::Menu(char bitmap[15], vector<Button> buttons)
+Menu::Menu(Delegate* delegate, char bitmap[15], vector<Button> buttons)
 {
     screen = al_load_bitmap(bitmap);
     buttons_ = buttons;
+    delegate_ = delegate;
 }
 
 Menu::~Menu()
@@ -28,6 +29,8 @@ void Menu::dispatchEvent(ALLEGRO_EVENT *event)
             }
         }
     }
+    if (event->type == ALLEGRO_EVENT_TIMER)
+        draw();
 }
 
 void Menu::draw()

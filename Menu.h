@@ -14,7 +14,7 @@ using namespace std;
 class Menu : public Subgame
 {
     public:
-        Menu(char bitmap[15], vector<Button> buttons);
+        Menu(Delegate* delegate, char bitmap[15], vector<Button> buttons);
         ~Menu();
         void draw();
         int clicked(int x, int y);

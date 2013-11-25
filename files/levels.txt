@@ -1,2 +1,0 @@
-LAB-143 50 50 1 0 0 1 1 pics/level01.bmp
-LAB-1.6.22 50 150 0 0 0 1 1 pics/level01.bmp

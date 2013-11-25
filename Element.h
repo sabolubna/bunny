@@ -2,34 +2,35 @@
 #define ELEMENT_H
 
 #include "main.h"
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <Math.h>
 
-#include "Room.h"
+using namespace std;
 
 class Element
 {
     public:
-        Element();
         virtual ~Element();
         virtual void draw();
-        int compareTo(Element that);
-        bool collides(Element that);
-        void changeSpeed(int x, int y);
+        virtual void dispatchEvent(ALLEGRO_EVENT* event);
+        void changeSpeedBy(int x, int y);
         void setSpeed(int x, int y);
-        void move();
-        void wall(Room* room);
+        virtual void move();
+        bool collidesWith(Element* that);
+        virtual void bounceFromWall(int borders[4]);
+        bool lessThan(Element* that);
+        double posy_;
 
     protected:
-        double posx, posy, posz;
-        double height, width, length;
-        ALLEGRO_BITMAP *picture;
-        double step;
-        int speedx, speedy;
+        double posx_, posz_;
+        double pic_height_, pic_width_, height_, width_;
+        ALLEGRO_BITMAP *picture_;
+        double step_;
+        int speedx_, speedy_;
 
     private:
 };

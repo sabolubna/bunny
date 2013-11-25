@@ -5,9 +5,13 @@
 #define ITEM_CNT 2
 #define GRADE_CNT 2
 #define LVL_CNT 2
-#define BUTTON 20
+#define LEVELTYPES 2
 
 enum GameState {MENU, PLAYING, PAUSE};
+
+enum Side {LEFT, UP, RIGHT, DOWN};
+
+enum RoomType {NORMAL = 0, BONUS = 2, TREASURE = 3, SECRET = 6};
 
 using namespace std;
 
