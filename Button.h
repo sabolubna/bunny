@@ -13,7 +13,7 @@ class Button
                 virtual ~ClickHandler() {}
         };
         Button();
-        Button(ClickHandler* handler, int x, int y, int h, int w);
+        Button(ClickHandler* handler, int x, int y, int width, int height, int picposx, int picposy);
         virtual ~Button();
         bool clicked(int x, int y);
         void draw(ALLEGRO_COLOR color);
@@ -21,7 +21,8 @@ class Button
 
     protected:
         ClickHandler* handler_;
-        int posx_, posy_, height_, width_;
+        int posx_, posy_, width_, height_;
+        ALLEGRO_BITMAP* picture_;
 
     private:
 };

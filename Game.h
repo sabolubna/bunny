@@ -21,6 +21,8 @@ class Game : public Delegate
         void onPause();
         void resume();
         void endGame();
+        void about();
+        void back();
 
     private:
         bool running_;
@@ -28,6 +30,7 @@ class Game : public Delegate
         Subgame* subgame_;
         Menu* mainmenu_;
         Menu* pausemenu_;
+        Menu* about_;
         ActualGame* actualGame_;
 };
 

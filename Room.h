@@ -11,6 +11,7 @@
 #include <typeinfo>
 #include "Door.h"
 #include "Bunny.h"
+#include "Item.h"
 
 class Room
 {
@@ -21,7 +22,7 @@ class Room
         void dispatchEvent(ALLEGRO_EVENT* event);
         void findCollisions();
         void createDoor(Room* that, Side side);
-        void insert(Element* element);
+        void insert(Item* item);
         int bunnyAtDoor_;
         map<int, Room*> rooms_;
         RoomType type_;
@@ -31,6 +32,7 @@ class Room
         Bunny* bunny_;
         vector<Element*> elements_;
         vector<Door*> doors_;
+        vector<Item*> items_;
 
     private:
 };

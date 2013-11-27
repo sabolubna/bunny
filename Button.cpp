@@ -2,7 +2,16 @@
 
 Button::Button() {}
 
-Button::Button(ClickHandler* handler, int x, int y, int w, int h) : handler_(handler), posx_(x), posy_(y), width_(w), height_(h) {};
+Button::Button(ClickHandler* handler, int x, int y, int width, int height, int picposx, int picposy)
+{
+    handler_ = handler;
+    posx_ = x;
+    posy_ = y;
+    width_ = width;
+    height_ = height;
+    ALLEGRO_BITMAP* buttons = al_load_bitmap("pics/buttons.png");
+    picture_ = al_create_sub_bitmap(buttons, picposx, picposy, width, height);
+}
 
 bool Button::clicked(int x, int y)
 {
@@ -13,7 +22,7 @@ bool Button::clicked(int x, int y)
 
 void Button::draw(ALLEGRO_COLOR color)
 {
-    al_draw_filled_rectangle(posx_, posy_, posx_ + width_, posy_+height_, color);
+    al_draw_bitmap(picture_, posx_, posy_, 0);
 }
 
 void Button::onClick()

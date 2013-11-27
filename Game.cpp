@@ -49,23 +49,48 @@ class EndGameClickHandler : public Button::ClickHandler
         Game* game_;
 };
 
+class AboutClickHandler : public Button::ClickHandler
+{
+    public:
+        AboutClickHandler(Game* game): game_(game) {}
+        void onClick()
+        {
+            game_->about();
+        }
+    private:
+        Game* game_;
+};
+
+class BackClickHandler : public Button::ClickHandler
+{
+    public:
+        BackClickHandler(Game* game): game_(game) {}
+        void onClick()
+        {
+            game_->back();
+        }
+    private:
+        Game* game_;
+};
+
 Game::Game()
 {
     running_ = true;
 
     vector<Button> buttons;
-    buttons.push_back(Button(new PlayClickHandler(this), 450, 50, 300, 50));
-    //buttons.push_back(Button(this, 50, 150, 300, 50));
-    //buttons.push_back(Button(this, 50, 250, 300, 50));
-    buttons.push_back(Button(new QuitClickHandler(this), 450, 350, 300, 50));
+    buttons.push_back(Button(new PlayClickHandler(this), 450, 150, 299, 54, 0, 0));
+    buttons.push_back(Button(new AboutClickHandler(this), 450, 250, 299, 54, 0, 54));
+    buttons.push_back(Button(new QuitClickHandler(this), 450, 350, 299, 54, 0, 108));
     mainmenu_ = new Menu(this, "pics/mainmenu.png", buttons);
 
     buttons.clear();
-    buttons.push_back(Button(new ResumeClickHandler(this), 350, 150, 100, 50));
-    buttons.push_back(Button(new EndGameClickHandler(this), 350, 250, 100, 50));
-    //buttons.push_back(Button(this, 350, 350, 100, 50));
-    //buttons.push_back(Button(this, 350, 450, 100, 50));
+    buttons.push_back(Button(new ResumeClickHandler(this), 250, 250, 299, 54, 0, 162));
+    buttons.push_back(Button(new EndGameClickHandler(this), 250, 350, 299, 54, 0, 108));
     pausemenu_ = new Menu(this, "pics/level02.bmp", buttons);
+
+    buttons.clear();
+    buttons.push_back(Button(new BackClickHandler(this), 550, 470, 132, 54, 0, 216));
+    about_ = new Menu(this, "pics/about.png", buttons);
 
     subgame_ = mainmenu_;
     GameState state_ = MENU;
@@ -112,6 +137,18 @@ void Game::resume()
 void Game::endGame()
 {
     //actualGame_->endGame();
+    state_ = MENU;
+    subgame_ = mainmenu_;
+}
+
+void Game::about()
+{
+    state_ = ABOUT;
+    subgame_ = about_;
+}
+
+void Game::back()
+{
     state_ = MENU;
     subgame_ = mainmenu_;
 }

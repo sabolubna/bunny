@@ -8,7 +8,7 @@ Bunny::Bunny()
     al_convert_mask_to_alpha(picture_, al_map_rgb(255,0,0));
     width_ = 50;
     pic_width_ = 50;
-    height_ = 40;
+    height_ = 30;
     pic_height_ = 98;
     posx_ = 50;
     posy_ = 300;
@@ -25,6 +25,10 @@ Bunny::Bunny()
     coins_ = 3;
     hearts_ = 3;
     hp_ = 6;
+    for (int i = 0; i < ITEM_CNT; i++)
+    {
+        itemsCollected[i] = false;
+    }
 }
 
 Bunny::~Bunny()
@@ -55,7 +59,7 @@ void Bunny::draw()
     }
     if (jumpState_ >= 5)
         jumpState_ = 0;
-    //al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+10, width_/2, height_/2, al_map_rgba(0,0,0,50));
+    al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+5, width_/2, height_/2, al_map_rgba(0,0,0,50));
    // if (game->bunny.immortal < al_get_time())
         al_draw_scaled_bitmap(picture_,0+a*200,0+dir*392,200,392,posx_,posy_-90,50,98,0);
     //else
@@ -126,5 +130,15 @@ void Bunny::handleCollision(Door* door)
     if (door->fits(posx_, posy_, width_, height_) && !door->locked_ && (!door->keyNeeded_ || keys_ > 0))
     {
         atDoor_ = door->side_;
+    }
+}
+
+int Bunny::handleCollision(Item* item)
+{
+    if (coins_ >= item->price_)
+    {
+        itemsCollected[item->number_] = true;
+        coins_ -= item->price_;
+        return 1;
     }
 }

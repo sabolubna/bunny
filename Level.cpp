@@ -13,6 +13,7 @@ Level::Level(int levelnum, Bunny* bunny)
     for (int i = 0; i < 2; i++)
     {
         nextRoom = new Room(bunny, NORMAL);
+        nextRoom->insert(new Item(300, 400, 2, 2));
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }

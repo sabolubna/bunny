@@ -7,7 +7,7 @@
 #define LVL_CNT 2
 #define LEVELTYPES 2
 
-enum GameState {MENU, PLAYING, PAUSE};
+enum GameState {MENU, PLAYING, PAUSE, ABOUT};
 
 enum Side {LEFT, UP, RIGHT, DOWN};
 

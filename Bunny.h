@@ -9,6 +9,7 @@
 #include <time.h>
 #include <typeinfo>
 #include "Door.h"
+#include "Item.h"
 
 class Bunny : public Element
 {
@@ -20,11 +21,13 @@ class Bunny : public Element
         void dispatchEvent(ALLEGRO_EVENT* event);
         int atDoor_;
         void handleCollision(Door* door);
+        int handleCollision(Item* item);
         int keys_;
         int bombs_;
         int coins_;
         int hearts_;
         int hp_;
+        bool itemsCollected[ITEM_CNT];
 
     protected:
         double lastAnimation_;

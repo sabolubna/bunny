@@ -41,6 +41,10 @@ void Room::draw()
     {
         elements_.push_back(doors_[i]);
     }
+    for (int i = 0; i < items_.size(); i++)
+    {
+        elements_.push_back(items_[i]);
+    }
     sort (elements_.begin(), elements_.end(), compare);
     for (int i = 0; i < elements_.size(); i++)
     {
@@ -70,5 +74,20 @@ void Room::findCollisions()
             bunny_->handleCollision(doors_[i]);
         }
     }
+    int i = 0;
+    while (i < items_.size())
+    {
+        if (bunny_->collidesWith(items_[i]))
+        {
+            if (bunny_->handleCollision(items_[i]) == 1)
+                items_.erase(items_.begin()+i);
+        }
+        i++;
+    }
     bunny_->bounceFromWall(borders_);
+}
+
+void Room::insert(Item* item)
+{
+    items_.push_back(item);
 }

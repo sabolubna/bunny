@@ -7,6 +7,7 @@
 #include <string>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 #include <Math.h>
 
 using namespace std;
@@ -14,6 +15,7 @@ using namespace std;
 class Element
 {
     public:
+        Element();
         virtual ~Element();
         virtual void draw();
         virtual void dispatchEvent(ALLEGRO_EVENT* event);

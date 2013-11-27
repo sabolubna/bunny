@@ -1,5 +1,12 @@
 #include "Element.h"
 
+Element::Element()
+{
+    step_ = 0;
+    speedx_ = 0;
+    speedy_ = 0;
+}
+
 Element::~Element()
 {
     //dtor
@@ -7,7 +14,10 @@ Element::~Element()
 
 void Element::dispatchEvent(ALLEGRO_EVENT* event)
 {
-
+    if (event->type == ALLEGRO_EVENT_TIMER)
+    {
+        move();
+    }
 }
 
 bool Element::lessThan(Element* that)
@@ -41,14 +51,16 @@ void Element::setSpeed(int x, int y)
 
 void Element::move()
 {
+    if (posz_ > 0) posz_ -= 1;
     if (speedx_ == 0 && speedy_ == 0) return;
-    double sq = sqrt(pow(speedx_,2)+pow(speedy_,2));
+    double sq = sqrt(speedx_*speedx_ + speedy_*speedy_);
     posx_ += 1.0 * speedx_ * step_ / sq;
     posy_ += 1.0 * speedy_ * step_ / sq;
 }
 
 void Element::draw()
 {
+    al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+5, width_/2, height_/2, al_map_rgba(0,0,0,50));
     al_draw_bitmap(picture_, posx_, posy_ - pic_height_ - posz_, 0);
 }
 
