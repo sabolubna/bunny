@@ -45,6 +45,7 @@ void Level::dispatchEvent(ALLEGRO_EVENT* event)
 
 void Level::enter(Room* room)
 {
+    currentRoom_->leave();
     currentRoom_ = room;
     switch (bunny_->atDoor_)
     {
@@ -96,5 +97,4 @@ void Level::draw()
         al_draw_bitmap_region(numbers_,(bunny_->keys_ % 10)*25,0,25,35,385,10,0);
     }
     else al_draw_bitmap_region(numbers_,(bunny_->keys_ % 10)*25,0,25,35,360,10,0);
-
 }

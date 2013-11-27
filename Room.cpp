@@ -39,11 +39,15 @@ void Room::draw()
     elements_.push_back(bunny_);
     for (int i = 0; i < doors_.size(); i++)
     {
-        elements_.push_back(doors_[i]);
+        doors_[i]->draw();
     }
     for (int i = 0; i < items_.size(); i++)
     {
         elements_.push_back(items_[i]);
+    }
+    for (int i = 0; i < shots_.size(); i++)
+    {
+        elements_.push_back(shots_[i]);
     }
     sort (elements_.begin(), elements_.end(), compare);
     for (int i = 0; i < elements_.size(); i++)
@@ -56,6 +60,20 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
 {
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
+        int i = 0;
+        Shot* shot = bunny_->shoot();
+        if (shot != NULL)
+            shots_.push_back(shot);
+        while (i < shots_.size())
+        {
+            shots_[i]->bounceFromWall(borders_);
+            if (shots_[i]->range_ <= 0)
+            {
+                shots_.erase(shots_.begin()+i);
+            }
+            else
+                i++;
+        }
         draw();
         findCollisions();
     }
@@ -67,6 +85,7 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
 
 void Room::findCollisions()
 {
+    //collisions with doors
     for (int i = 0; i < doors_.size(); i++)
     {
         if (bunny_->collidesWith(doors_[i]))
@@ -74,6 +93,7 @@ void Room::findCollisions()
             bunny_->handleCollision(doors_[i]);
         }
     }
+    //collisions with items
     int i = 0;
     while (i < items_.size())
     {
@@ -81,8 +101,22 @@ void Room::findCollisions()
         {
             if (bunny_->handleCollision(items_[i]) == 1)
                 items_.erase(items_.begin()+i);
+            else i++;
         }
-        i++;
+        else
+            i++;
+    }
+
+    i = 0;
+    while (i < shots_.size())
+    {
+        if (bunny_->collidesWith(shots_[i]) && shots_[i]->hurtsBunny_)
+        {
+            bunny_->handleCollision(shots_[i]);
+            shots_.erase(shots_.begin()+i);
+        }
+        else
+            i++;
     }
     bunny_->bounceFromWall(borders_);
 }
@@ -90,4 +124,9 @@ void Room::findCollisions()
 void Room::insert(Item* item)
 {
     items_.push_back(item);
+}
+
+void Room::leave()
+{
+    shots_.clear();
 }

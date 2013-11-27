@@ -29,6 +29,14 @@ Bunny::Bunny()
     {
         itemsCollected[i] = false;
     }
+    shotTime_ = 0.2;
+    lastShot_ = al_get_time() - shotTime_;
+    ALLEGRO_BITMAP* shots = al_load_bitmap("pics/shots.png");
+    al_convert_mask_to_alpha(shots, al_map_rgb(255, 255, 255));
+    shotPicture_ = al_create_sub_bitmap(shots, 0, 0, 20, 20);
+    range_ = 300;
+    damage_ = 10;
+    shooting_ = false;
 }
 
 Bunny::~Bunny()
@@ -74,18 +82,46 @@ void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
         if (event->keyboard.keycode == ALLEGRO_KEY_W)
         {
             changeSpeedBy(0, -1);
+            return;
         }
         if (event->keyboard.keycode == ALLEGRO_KEY_D)
         {
             changeSpeedBy(1, 0);
+            return;
         }
         if (event->keyboard.keycode == ALLEGRO_KEY_S)
         {
             changeSpeedBy(0, 1);
+            return;
         }
         if (event->keyboard.keycode == ALLEGRO_KEY_A)
         {
             changeSpeedBy(-1, 0);
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_LEFT)
+        {
+            shotDirection_ = LEFT;
+            shooting_ = true;
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_UP)
+        {
+            shotDirection_ = UP;
+            shooting_ = true;
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_RIGHT)
+        {
+            shotDirection_ = RIGHT;
+            shooting_ = true;
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_DOWN)
+        {
+            shotDirection_ = DOWN;
+            shooting_ = true;
+            return;
         }
     }
     if (event->type == ALLEGRO_EVENT_KEY_UP)
@@ -93,18 +129,42 @@ void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
         if (event->keyboard.keycode == ALLEGRO_KEY_W)
         {
             changeSpeedBy(0, 1);
+            return;
         }
         if (event->keyboard.keycode == ALLEGRO_KEY_D)
         {
             changeSpeedBy(-1, 0);
+            return;
         }
         if (event->keyboard.keycode == ALLEGRO_KEY_S)
         {
             changeSpeedBy(0, -1);
+            return;
         }
         if (event->keyboard.keycode == ALLEGRO_KEY_A)
         {
             changeSpeedBy(1, 0);
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_LEFT && shotDirection_ == LEFT)
+        {
+            shooting_ = false;
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_UP && shotDirection_ == UP)
+        {
+            shooting_ = false;
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_RIGHT && shotDirection_ == RIGHT)
+        {
+            shooting_ = false;
+            return;
+        }
+        if (event->keyboard.keycode == ALLEGRO_KEY_DOWN && shotDirection_ == DOWN)
+        {
+            shooting_ = false;
+            return;
         }
     }
     if (event->type == ALLEGRO_EVENT_TIMER)
@@ -141,4 +201,39 @@ int Bunny::handleCollision(Item* item)
         coins_ -= item->price_;
         return 1;
     }
+}
+
+void Bunny::handleCollision(Shot* shot)
+{
+    if (!shot->hurtsBunny_)
+        return;
+    hp_ -= shot->damage_;
+}
+
+Shot* Bunny::shoot()
+{
+    if (al_get_time() > lastShot_ + shotTime_ && shooting_)
+    {
+        lastShot_ = al_get_time();
+        int shotSpeedx, shotSpeedy;
+        if (shotDirection_ == LEFT || shotDirection_ == RIGHT)
+        {
+            shotSpeedy = 0;
+            if (shotDirection_ == LEFT)
+                shotSpeedx = -1;
+            else
+                shotSpeedx = 1;
+        }
+        if (shotDirection_ == UP || shotDirection_ == DOWN)
+        {
+            shotSpeedx = 0;
+            if (shotDirection_ == UP)
+                shotSpeedy = -1;
+            else
+                shotSpeedy = 1;
+        }
+        return new Shot(shotPicture_, posx_ + width_/2 - 10, posy_+1, 30, shotSpeedx, shotSpeedy,
+             range_, false, damage_);
+    }
+    return NULL;
 }

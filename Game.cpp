@@ -76,7 +76,6 @@ class BackClickHandler : public Button::ClickHandler
 Game::Game()
 {
     running_ = true;
-
     vector<Button> buttons;
     buttons.push_back(Button(new PlayClickHandler(this), 450, 150, 299, 54, 0, 0));
     buttons.push_back(Button(new AboutClickHandler(this), 450, 250, 299, 54, 0, 54));
