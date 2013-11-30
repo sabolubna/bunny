@@ -7,6 +7,7 @@ class Delegate
     public:
         virtual void onPause() = 0;
         virtual void resume() = 0;
+        virtual void endGame() = 0;
     protected:
     private:
 };

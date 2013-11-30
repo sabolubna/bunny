@@ -19,7 +19,7 @@ class Level
         void draw();
 
     protected:
-        ALLEGRO_BITMAP *background_, *numbers_, *hearts_, *items_, *pickups_, *shots_;
+        ALLEGRO_BITMAP *background_, *numbers_, *hearts_, *items_, *pickups_, *shots_, *enemies_;
         Room* firstRoom_;
         Room* currentRoom_;
         Bunny* bunny_;

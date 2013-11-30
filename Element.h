@@ -24,12 +24,11 @@ class Element
         virtual void move();
         bool collidesWith(Element* that);
         virtual void bounceFromWall(int borders[4]);
-        bool lessThan(Element* that);
         double posy_;
 
     protected:
         double posx_, posz_;
-        double pic_height_, pic_width_, height_, width_;
+        int pic_height_, pic_width_, height_, width_;
         ALLEGRO_BITMAP *picture_;
         double step_;
         int speedx_, speedy_;

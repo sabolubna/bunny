@@ -34,6 +34,11 @@ void ActualGame::dispatchEvent(ALLEGRO_EVENT *event)
 {
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
+        if (!level_->bunny_->alive())
+        {
+            delegate_->endGame();
+            al_rest(1);
+        }
         level_->dispatchEvent(event);
         al_flip_display();
     }

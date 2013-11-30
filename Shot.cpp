@@ -12,7 +12,7 @@ Shot::Shot(ALLEGRO_BITMAP *pic, int posx, int posy, int posz, double speedx, dou
     range_ = range;
     hurtsBunny_ = hurtsBunny;
     damage_ = dmg;
-    step_ = 4.5;
+    step_ = 5;
     width_ = 20;
     height_ = 20;
     pic_width_ = 20;

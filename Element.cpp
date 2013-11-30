@@ -17,13 +17,10 @@ void Element::dispatchEvent(ALLEGRO_EVENT* event)
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
         move();
+        draw();
     }
 }
 
-bool Element::lessThan(Element* that)
-{
-    return posy_ < that->posy_;
-}
 
 void Element::bounceFromWall(int borders[4])
 {

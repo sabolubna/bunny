@@ -21,12 +21,14 @@ class Bunny : public Element
         void setPos(int x, int y, int z);
         void draw();
         void dispatchEvent(ALLEGRO_EVENT* event);
-        int atDoor_;
         void handleCollision(Door* door);
         int handleCollision(Item* item);
         void handleCollision(Shot* shot);
         int handleCollision(Pickup* pickup);
+        void hurt();
+        bool alive();
         int keys_;
+        int atDoor_;
         int bombs_;
         int coins_;
         int hearts_;
@@ -45,6 +47,7 @@ class Bunny : public Element
         int damage_;
         Side shotDirection_;
         bool shooting_;
+        double immunityTime_;
 
     private:
 };

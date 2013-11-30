@@ -3,6 +3,7 @@
 
 Level::Level(int levelnum)
 {
+    srand(time(NULL));
     items_ = al_load_bitmap("pics/items.png");
     al_convert_mask_to_alpha(items_, al_map_rgb(255, 255, 255));
 
@@ -15,17 +16,21 @@ Level::Level(int levelnum)
     shots_ = al_load_bitmap("pics/shots.png");
     al_convert_mask_to_alpha(shots_, al_map_rgb(255, 255, 255));
 
+    enemies_ = al_load_bitmap("pics/enemies.png");
+    al_convert_mask_to_alpha(enemies_, al_map_rgb(255, 255, 255));
+
     background_ = al_load_bitmap("pics/level01.bmp");
     hearts_ = al_load_bitmap("pics/hearts.bmp");
     bunny_ = new Bunny(shots_);
     firstRoom_ = new Room(bunny_, NORMAL);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 5; i++)
     {
         nextRoom = new Room(bunny_, NORMAL);
-        nextRoom->insert(new Item(300, 400, 0, 2, items_, numbers_));
-        nextRoom->insert(new Pickup(650, 200, 2, 1, pickups_, numbers_));
+        nextRoom->insert(new Enemy(100, 300, rand()%2, enemies_, shots_));
+        nextRoom->insert(new Item(300, 400, rand()%10, 2, items_, numbers_));
+        nextRoom->insert(new Pickup(650, 200, rand()%4, 0, pickups_, numbers_));
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }

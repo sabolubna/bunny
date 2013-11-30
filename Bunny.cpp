@@ -29,12 +29,13 @@ Bunny::Bunny(ALLEGRO_BITMAP* shots)
     {
         itemsCollected[i] = false;
     }
-    shotTime_ = 0.7;
+    shotTime_ = 0.6;
     lastShot_ = al_get_time() - shotTime_;
     shotPicture_ = al_create_sub_bitmap(shots, 0, 0, 20, 20);
     range_ = 300;
     damage_ = 10;
     shooting_ = false;
+    immunityTime_ = al_get_time();
 }
 
 Bunny::~Bunny()
@@ -66,11 +67,11 @@ void Bunny::draw()
     if (jumpState_ >= 5)
         jumpState_ = 0;
     al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+5, width_/2, height_/2, al_map_rgba(0,0,0,50));
-   // if (game->bunny.immortal < al_get_time())
+    if (immunityTime_ < al_get_time())
         al_draw_scaled_bitmap(picture_,0+a*200,0+dir*392,200,392,posx_,posy_-90,50,98,0);
-    //else
-        //al_draw_tinted_scaled_bitmap(game->bunny.picture,al_map_rgba(200,100,100,100),0+a*200,
-                        //0+game->bunny.statey*392,200,392,game->bunny.posx,game->bunny.posy-90,50,98,0);
+    else
+        al_draw_tinted_scaled_bitmap(picture_,al_map_rgba(200,100,100,100),0+a*200,0+dir*392,200,392,
+                                     posx_,posy_-90,50,98,0);
 }
 
 void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
@@ -173,6 +174,7 @@ void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
             lastAnimation_ = al_get_time();
         }
         move();
+        draw();
     }
 }
 
@@ -249,4 +251,18 @@ Shot* Bunny::shoot()
              range_, false, damage_);
     }
     return NULL;
+}
+
+void Bunny::hurt()
+{
+    if (immunityTime_ < al_get_time())
+    {
+        hp_--;
+        immunityTime_ = al_get_time() + 1;
+    }
+}
+
+bool Bunny::alive()
+{
+    return hp_ > 0;
 }

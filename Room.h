@@ -14,18 +14,20 @@
 #include "Item.h"
 #include "Shot.h"
 #include "Pickup.h"
+#include "Enemy.h"
 
 class Room
 {
     public:
         Room(Bunny* bunny, RoomType type);
         ~Room();
-        void draw();
+        void collectElements();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void findCollisions();
         void createDoor(Room* that, Side side);
         void insert(Item* item);
         void insert(Pickup* pickup);
+        void insert(Enemy* enemy);
         void leave();
         int bunnyAtDoor_;
         map<int, Room*> rooms_;
@@ -39,6 +41,7 @@ class Room
         vector<Item*> items_;
         vector<Shot*> shots_;
         vector<Pickup*> pickups_;
+        vector<Enemy*> enemies_;
 
     private:
 };

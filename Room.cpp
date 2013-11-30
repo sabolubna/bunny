@@ -33,15 +33,10 @@ bool compare(Element* x, Element* y)
     return x->posy_ < y->posy_;
 }
 
-void Room::draw()
+void Room::collectElements()
 {
     elements_.clear();
     elements_.push_back(bunny_);
-    for (int i = 0; i < doors_.size(); i++)
-    {
-        doors_[i]->draw();
-    }
-
     for (int i = 0; i < items_.size(); i++)
     {
         elements_.push_back(items_[i]);
@@ -54,11 +49,11 @@ void Room::draw()
     {
         elements_.push_back(pickups_[i]);
     }
-    sort (elements_.begin(), elements_.end(), compare);
-    for (int i = 0; i < elements_.size(); i++)
+    for (int i = 0; i < enemies_.size(); i++)
     {
-        elements_[i]->draw();
+        elements_.push_back(enemies_[i]);
     }
+    sort (elements_.begin(), elements_.end(), compare);
 }
 
 void Room::dispatchEvent(ALLEGRO_EVENT* event)
@@ -81,8 +76,12 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
             else
                 i++;
         }
+        for (int i = 0; i < doors_.size(); i++)
+        {
+            doors_[i]->draw();
+        }
         findCollisions();
-        draw();
+        collectElements();
         for (int i = 0; i < elements_.size(); i++)
         {
             elements_[i]->dispatchEvent(event);
@@ -134,7 +133,37 @@ void Room::findCollisions()
         else
             i++;
     }
+    //collisions with enemies
+    for (int i = 0; i < enemies_.size(); i++)
+    {
+        enemies_[i]->bounceFromWall(borders_);
+        if (bunny_->collidesWith(enemies_[i]))
+        {
+            bunny_->hurt();
+        }
+    }
     //collisions with shots
+    i = 0;
+    while (i < enemies_.size())
+    {
+        int j = 0;
+        while (j < shots_.size())
+        {
+           if (enemies_[i]->collidesWith(shots_[j]) && !shots_[j]->hurtsBunny_)
+            {
+                if (enemies_[i]->handleCollision(shots_[j]))
+                {
+                    enemies_.erase(enemies_.begin()+i);
+                    i--;
+                    break;
+                }
+                shots_.erase(shots_.begin()+j);
+            }
+            else
+                j++;
+        }
+        i++;
+    }
     i = 0;
     while (i < shots_.size())
     {
@@ -157,6 +186,11 @@ void Room::insert(Item* item)
 void Room::insert(Pickup* pickup)
 {
     pickups_.push_back(pickup);
+}
+
+void Room::insert(Enemy* enemy)
+{
+    enemies_.push_back(enemy);
 }
 
 void Room::leave()
