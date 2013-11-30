@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(int x, int y, int num, int price)
+Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* items, ALLEGRO_BITMAP* numbers)
 {
     posx_ = x;
     posy_ = y;
@@ -11,9 +11,8 @@ Item::Item(int x, int y, int num, int price)
     pic_height_ = 45;
     number_ = num;
     price_ = price;
-    ALLEGRO_BITMAP* items = al_load_bitmap("pics/items.png");
-    al_convert_mask_to_alpha(items, al_map_rgb(255, 255, 255));
     picture_ = al_create_sub_bitmap(items, number_%10*45, number_/10*45, 45, 45);
+    numbers_ = numbers;
 }
 
 Item::~Item()
@@ -26,18 +25,16 @@ void Item::draw()
     Element::draw();
     if (price_ > 0)
     {
-        ALLEGRO_BITMAP* numbers = al_load_bitmap("pics/numbers.bmp");
-        al_convert_mask_to_alpha(numbers, al_map_rgb(0, 0, 0));
         if (price_ >= 10)
         {
-            al_draw_bitmap_region(numbers,(price_/10)*25,0,25,35,posx_+12,posy_+10,0);
-            al_draw_bitmap_region(numbers,(price_ % 10)*25,0,25,35,posx_+37,posy_+10,0);
-            al_draw_bitmap_region(numbers,250,0,25,35,posx_-13,posy_+10,0);
+            al_draw_bitmap_region(numbers_,(price_/10)*25,0,25,35,posx_+12,posy_+10,0);
+            al_draw_bitmap_region(numbers_,(price_ % 10)*25,0,25,35,posx_+37,posy_+10,0);
+            al_draw_bitmap_region(numbers_,250,0,25,35,posx_-13,posy_+10,0);
         }
         else
         {
-            al_draw_bitmap_region(numbers,(price_ % 10)*25,0,25,35,posx_+22,posy_+10,0);
-            al_draw_bitmap_region(numbers,250,0,25,35,posx_-3,posy_+10,0);
+            al_draw_bitmap_region(numbers_,(price_ % 10)*25,0,25,35,posx_+22,posy_+10,0);
+            al_draw_bitmap_region(numbers_,250,0,25,35,posx_-3,posy_+10,0);
         }
     }
 }

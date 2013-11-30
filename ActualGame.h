@@ -21,7 +21,6 @@ class ActualGame : public Subgame
         void nextLevel();
     protected:
         Delegate* delegate_;
-        Bunny* bunny_;
         Level* level_;
         bool usedlevels_[LEVELTYPES];
     private:

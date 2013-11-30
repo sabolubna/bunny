@@ -13,6 +13,8 @@ enum Side {LEFT, UP, RIGHT, DOWN};
 
 enum RoomType {NORMAL = 0, BONUS = 2, TREASURE = 3, SECRET = 6};
 
+enum PickupType {COIN, BOMB, KEY, CARROT};
+
 using namespace std;
 
 #endif // MAIN_H_INCLUDED

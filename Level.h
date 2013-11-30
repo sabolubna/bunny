@@ -12,14 +12,14 @@ class Level
 {
     friend class ActualGame;
     public:
-        Level(int levelnum, Bunny* bunny);
+        Level(int levelnum);
         ~Level();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void enter(Room* room);
         void draw();
 
     protected:
-        ALLEGRO_BITMAP *background_, *numbers_, *hearts_;
+        ALLEGRO_BITMAP *background_, *numbers_, *hearts_, *items_, *pickups_, *shots_;
         Room* firstRoom_;
         Room* currentRoom_;
         Bunny* bunny_;

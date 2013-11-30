@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Bunny::Bunny()
+Bunny::Bunny(ALLEGRO_BITMAP* shots)
 {
     picture_ = al_load_bitmap("pics/bunny.png");
     al_convert_mask_to_alpha(picture_, al_map_rgb(255,0,0));
@@ -29,10 +29,8 @@ Bunny::Bunny()
     {
         itemsCollected[i] = false;
     }
-    shotTime_ = 0.2;
+    shotTime_ = 0.7;
     lastShot_ = al_get_time() - shotTime_;
-    ALLEGRO_BITMAP* shots = al_load_bitmap("pics/shots.png");
-    al_convert_mask_to_alpha(shots, al_map_rgb(255, 255, 255));
     shotPicture_ = al_create_sub_bitmap(shots, 0, 0, 20, 20);
     range_ = 300;
     damage_ = 10;
@@ -208,6 +206,21 @@ void Bunny::handleCollision(Shot* shot)
     if (!shot->hurtsBunny_)
         return;
     hp_ -= shot->damage_;
+}
+
+int Bunny::handleCollision(Pickup* pickup)
+{
+    if (coins_ < pickup->price_ || (hp_ == 2*hearts_ && pickup->type_ == 3))
+        return 0;
+    coins_ -= pickup->price_;
+    switch (pickup->type_)
+    {
+        case 0: if (coins_ < 99) coins_++; break;
+        case 1: if (bombs_ < 99) bombs_++; break;
+        case 2: if (keys_<99) keys_++; break;
+        case 3: hp_++; break;
+    }
+    return 1;
 }
 
 Shot* Bunny::shoot()

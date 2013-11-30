@@ -118,6 +118,8 @@ bool Game::isRunning()
 
 void Game::dispatchEvent(ALLEGRO_EVENT *event)
 {
+    if (event->type == ALLEGRO_EVENT_TIMER || event->type == ALLEGRO_EVENT_KEY_DOWN
+        || event->type == ALLEGRO_EVENT_KEY_UP || event->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
     subgame_->dispatchEvent(event);
 }
 

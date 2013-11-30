@@ -13,6 +13,7 @@
 #include "Bunny.h"
 #include "Item.h"
 #include "Shot.h"
+#include "Pickup.h"
 
 class Room
 {
@@ -24,6 +25,7 @@ class Room
         void findCollisions();
         void createDoor(Room* that, Side side);
         void insert(Item* item);
+        void insert(Pickup* pickup);
         void leave();
         int bunnyAtDoor_;
         map<int, Room*> rooms_;
@@ -36,6 +38,7 @@ class Room
         vector<Door*> doors_;
         vector<Item*> items_;
         vector<Shot*> shots_;
+        vector<Pickup*> pickups_;
 
     private:
 };

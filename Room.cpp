@@ -41,6 +41,7 @@ void Room::draw()
     {
         doors_[i]->draw();
     }
+
     for (int i = 0; i < items_.size(); i++)
     {
         elements_.push_back(items_[i]);
@@ -48,6 +49,10 @@ void Room::draw()
     for (int i = 0; i < shots_.size(); i++)
     {
         elements_.push_back(shots_[i]);
+    }
+    for (int i = 0; i < pickups_.size(); i++)
+    {
+        elements_.push_back(pickups_[i]);
     }
     sort (elements_.begin(), elements_.end(), compare);
     for (int i = 0; i < elements_.size(); i++)
@@ -69,17 +74,19 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
             shots_[i]->bounceFromWall(borders_);
             if (shots_[i]->range_ <= 0)
             {
+                Shot* toDelete = shots_[i];
                 shots_.erase(shots_.begin()+i);
+                delete toDelete;
             }
             else
                 i++;
         }
-        draw();
         findCollisions();
-    }
-    for (int i = 0; i < elements_.size(); i++)
-    {
-        elements_[i]->dispatchEvent(event);
+        draw();
+        for (int i = 0; i < elements_.size(); i++)
+        {
+            elements_[i]->dispatchEvent(event);
+        }
     }
 }
 
@@ -100,13 +107,34 @@ void Room::findCollisions()
         if (bunny_->collidesWith(items_[i]))
         {
             if (bunny_->handleCollision(items_[i]) == 1)
+            {
+                Item* toDelete = items_[i];
                 items_.erase(items_.begin()+i);
+                delete toDelete;
+            }
             else i++;
         }
         else
             i++;
     }
-
+    //collisions with pickups
+    i = 0;
+    while (i < pickups_.size())
+    {
+        if (bunny_->collidesWith(pickups_[i]))
+        {
+            if (bunny_->handleCollision(pickups_[i]) == 1)
+            {
+                Pickup* toDelete = pickups_[i];
+                pickups_.erase(pickups_.begin()+i);
+                delete toDelete;
+            }
+            else i++;
+        }
+        else
+            i++;
+    }
+    //collisions with shots
     i = 0;
     while (i < shots_.size())
     {
@@ -124,6 +152,11 @@ void Room::findCollisions()
 void Room::insert(Item* item)
 {
     items_.push_back(item);
+}
+
+void Room::insert(Pickup* pickup)
+{
+    pickups_.push_back(pickup);
 }
 
 void Room::leave()

@@ -11,11 +11,12 @@
 #include "Door.h"
 #include "Item.h"
 #include "Shot.h"
+#include "Pickup.h"
 
 class Bunny : public Element
 {
     public:
-        Bunny();
+        Bunny(ALLEGRO_BITMAP* shots);
         ~Bunny();
         void setPos(int x, int y, int z);
         void draw();
@@ -24,6 +25,7 @@ class Bunny : public Element
         void handleCollision(Door* door);
         int handleCollision(Item* item);
         void handleCollision(Shot* shot);
+        int handleCollision(Pickup* pickup);
         int keys_;
         int bombs_;
         int coins_;

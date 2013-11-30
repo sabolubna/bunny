@@ -5,13 +5,12 @@ using namespace std;
 
 ActualGame::ActualGame(Delegate* delegate)
 {
-    bunny_ = new Bunny();
     delegate_ = delegate;
     int r = rand()%LEVELTYPES;
     for (int i = 0; i < LEVELTYPES; i++)
         usedlevels_[i] = false;
     usedlevels_[r] = true;
-    level_ = new Level(r, bunny_);
+    level_ = new Level(r);
     //level_->currentRoom_->enter();
 }
 
@@ -28,7 +27,7 @@ void ActualGame::nextLevel()
         r = rand()%LEVELTYPES;
     } while (usedlevels_[r]);
     usedlevels_[r] = true;
-    level_ = new Level(r, bunny_);
+    level_ = new Level(r);
 }
 
 void ActualGame::dispatchEvent(ALLEGRO_EVENT *event)
@@ -42,11 +41,6 @@ void ActualGame::dispatchEvent(ALLEGRO_EVENT *event)
         && event->keyboard.keycode == ALLEGRO_KEY_ESCAPE)
     {
         delegate_->onPause();
-    }
-    else if (event->type == ALLEGRO_EVENT_KEY_DOWN
-        || event->type == ALLEGRO_EVENT_KEY_UP)
-    {
-        bunny_->dispatchEvent(event);
     }
     else
     {
