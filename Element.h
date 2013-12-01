@@ -25,12 +25,12 @@ class Element
         bool collidesWith(Element* that);
         virtual void bounceFromWall(int borders[4]);
         double posy_;
+        double step_;
 
     protected:
         double posx_, posz_;
         int pic_height_, pic_width_, height_, width_;
         ALLEGRO_BITMAP *picture_;
-        double step_;
         int speedx_, speedy_;
 
     private:

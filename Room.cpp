@@ -64,6 +64,13 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
         Shot* shot = bunny_->shoot();
         if (shot != NULL)
             shots_.push_back(shot);
+        for (int i = 0; i < enemies_.size(); i++)
+        {
+            vector<Shot*> shots = enemies_[i]->shoot();
+            if (shots.size() > 0)
+                for (int i = 0; i < shots.size(); i++)
+                    shots_.push_back(shots[i]);
+        }
         while (i < shots_.size())
         {
             shots_[i]->bounceFromWall(borders_);
@@ -144,36 +151,38 @@ void Room::findCollisions()
     }
     //collisions with shots
     i = 0;
-    while (i < enemies_.size())
+    while (i < shots_.size())
     {
-        int j = 0;
-        while (j < shots_.size())
+        if (shots_[i]->hurtsBunny_)
         {
-           if (enemies_[i]->collidesWith(shots_[j]) && !shots_[j]->hurtsBunny_)
+            if (bunny_->collidesWith(shots_[i]))
             {
-                if (enemies_[i]->handleCollision(shots_[j]))
+                bunny_->handleCollision(shots_[i]);
+                shots_.erase(shots_.begin()+i);
+            }
+            else
+                i++;
+        }
+        else
+        {
+            int j = 0;
+            while (j < enemies_.size())
+            {
+                if (enemies_[j]->collidesWith(shots_[i]))
                 {
-                    enemies_.erase(enemies_.begin()+i);
+                    if (enemies_[j]->handleCollision(shots_[i]))
+                    {
+                        enemies_.erase(enemies_.begin()+j);
+                    }
+                    shots_.erase(shots_.begin()+i);
                     i--;
                     break;
                 }
-                shots_.erase(shots_.begin()+j);
+                else
+                    j++;
             }
-            else
-                j++;
-        }
-        i++;
-    }
-    i = 0;
-    while (i < shots_.size())
-    {
-        if (bunny_->collidesWith(shots_[i]) && shots_[i]->hurtsBunny_)
-        {
-            bunny_->handleCollision(shots_[i]);
-            shots_.erase(shots_.begin()+i);
-        }
-        else
             i++;
+        }
     }
     bunny_->bounceFromWall(borders_);
 }

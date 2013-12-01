@@ -266,3 +266,11 @@ bool Bunny::alive()
 {
     return hp_ > 0;
 }
+
+double* Bunny::getPos()
+{
+    double* pos = new double[2];
+    pos[0] = posx_;
+    pos[1] = posy_;
+    return pos;
+}

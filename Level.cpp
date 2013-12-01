@@ -28,7 +28,8 @@ Level::Level(int levelnum)
     for (int i = 0; i < 5; i++)
     {
         nextRoom = new Room(bunny_, NORMAL);
-        nextRoom->insert(new Enemy(100, 300, rand()%2, enemies_, shots_));
+        //for (int i = 0; i < 3; i++)
+            nextRoom->insert(new Enemy(rand()%650+50, rand()%350+150, rand()%2, enemies_, shots_, bunny_));
         nextRoom->insert(new Item(300, 400, rand()%10, 2, items_, numbers_));
         nextRoom->insert(new Pickup(650, 200, rand()%4, 0, pickups_, numbers_));
         currentRoom_->createDoor(nextRoom, RIGHT);

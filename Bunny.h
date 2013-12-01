@@ -25,6 +25,7 @@ class Bunny : public Element
         int handleCollision(Item* item);
         void handleCollision(Shot* shot);
         int handleCollision(Pickup* pickup);
+        double* getPos();
         void hurt();
         bool alive();
         int keys_;
