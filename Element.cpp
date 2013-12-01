@@ -17,7 +17,6 @@ void Element::dispatchEvent(ALLEGRO_EVENT* event)
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
         move();
-        draw();
     }
 }
 

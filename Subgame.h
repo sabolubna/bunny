@@ -8,6 +8,7 @@ class Subgame
 {
     public:
         virtual void dispatchEvent(ALLEGRO_EVENT *event) = 0;
+        virtual void draw() = 0;
     protected:
         Delegate* delegate_;
 };

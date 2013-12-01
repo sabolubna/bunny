@@ -19,6 +19,8 @@ class ActualGame : public Subgame
         ~ActualGame();
         void dispatchEvent(ALLEGRO_EVENT *event);
         void nextLevel();
+        void draw();
+
     protected:
         Delegate* delegate_;
         Level* level_;

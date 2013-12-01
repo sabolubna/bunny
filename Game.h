@@ -23,6 +23,7 @@ class Game : public Delegate
         void endGame();
         void about();
         void back();
+        void draw();
 
     private:
         bool running_;

@@ -52,3 +52,8 @@ void ActualGame::dispatchEvent(ALLEGRO_EVENT *event)
         level_->dispatchEvent(event);
     }
 }
+
+void ActualGame::draw()
+{
+    level_->draw();
+}

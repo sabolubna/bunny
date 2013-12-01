@@ -19,7 +19,7 @@ int main()
     al_init_image_addon();
     al_init_primitives_addon();
     ALLEGRO_DISPLAY *display = al_create_display(800,600);
-    al_set_window_title(display,"Where's the cake?");
+    al_set_window_title(display,"The Bunny Story");
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     if (!al_install_keyboard())
     {
@@ -40,10 +40,20 @@ int main()
     Game game = Game();
 
     // main loop
+    bool redraw;
     while (game.isRunning())
     {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
+        if (event.type == ALLEGRO_EVENT_TIMER)
+        {
+            redraw = true;
+        }
+        if (redraw && al_is_event_queue_empty(queue))
+        {
+            game.draw();
+            redraw = false;
+        }
         game.dispatchEvent(&event);
     }
 

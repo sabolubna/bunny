@@ -83,10 +83,6 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
             else
                 i++;
         }
-        for (int i = 0; i < doors_.size(); i++)
-        {
-            doors_[i]->draw();
-        }
         findCollisions();
         collectElements();
         for (int i = 0; i < elements_.size(); i++)
@@ -146,7 +142,7 @@ void Room::findCollisions()
         enemies_[i]->bounceFromWall(borders_);
         if (bunny_->collidesWith(enemies_[i]))
         {
-            bunny_->hurt();
+            bunny_->hurt(1);
         }
     }
     //collisions with shots
@@ -157,7 +153,7 @@ void Room::findCollisions()
         {
             if (bunny_->collidesWith(shots_[i]))
             {
-                bunny_->handleCollision(shots_[i]);
+                bunny_->hurt(shots_[i]->damage_);
                 shots_.erase(shots_.begin()+i);
             }
             else
@@ -173,6 +169,12 @@ void Room::findCollisions()
                     if (enemies_[j]->handleCollision(shots_[i]))
                     {
                         enemies_.erase(enemies_.begin()+j);
+                        if (enemies_.size() == 0)
+                        {
+                            for (int k = 0; k < doors_.size(); k++)
+                                doors_[k]->unlock();
+                            //insert(new Pickup(383, 308, rand()%4, 0, pickups_, numbers_));
+                        }
                     }
                     shots_.erase(shots_.begin()+i);
                     i--;
@@ -202,7 +204,25 @@ void Room::insert(Enemy* enemy)
     enemies_.push_back(enemy);
 }
 
+void Room::enter()
+{
+    if (enemies_.size() > 0)
+        for (int i = 0; i < doors_.size(); i++)
+            doors_[i]->lock();
+}
+
 void Room::leave()
 {
     shots_.clear();
+}
+
+void Room::draw()
+{
+    for (int i = 0; i < doors_.size(); i++)
+    {
+        doors_[i]->draw();
+    }
+    collectElements();
+    for (int i = 0; i < elements_.size(); i++)
+        elements_[i]->draw();
 }

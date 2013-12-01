@@ -29,6 +29,8 @@ class Room
         void insert(Pickup* pickup);
         void insert(Enemy* enemy);
         void leave();
+        void enter();
+        void draw();
         int bunnyAtDoor_;
         map<int, Room*> rooms_;
         RoomType type_;

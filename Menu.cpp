@@ -29,8 +29,6 @@ void Menu::dispatchEvent(ALLEGRO_EVENT *event)
             }
         }
     }
-    if (event->type == ALLEGRO_EVENT_TIMER)
-        draw();
 }
 
 void Menu::draw()

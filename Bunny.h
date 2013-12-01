@@ -23,10 +23,9 @@ class Bunny : public Element
         void dispatchEvent(ALLEGRO_EVENT* event);
         void handleCollision(Door* door);
         int handleCollision(Item* item);
-        void handleCollision(Shot* shot);
         int handleCollision(Pickup* pickup);
         double* getPos();
-        void hurt();
+        void hurt(int damage);
         bool alive();
         int keys_;
         int atDoor_;

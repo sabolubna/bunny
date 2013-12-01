@@ -25,17 +25,20 @@ Level::Level(int levelnum)
     firstRoom_ = new Room(bunny_, NORMAL);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
+    /*
+    EnemyFactory* efactory = new EnemyFactory(firstnum, lastnum, enemies_, shots_, bunny_);
+    */
     for (int i = 0; i < 5; i++)
     {
         nextRoom = new Room(bunny_, NORMAL);
-        //for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
+            // nextRoom->insert(efactory->create();
             nextRoom->insert(new Enemy(rand()%650+50, rand()%350+150, rand()%2, enemies_, shots_, bunny_));
         nextRoom->insert(new Item(300, 400, rand()%10, 2, items_, numbers_));
         nextRoom->insert(new Pickup(650, 200, rand()%4, 0, pickups_, numbers_));
-        currentRoom_->createDoor(nextRoom, RIGHT);
+        currentRoom_->createDoor(nextRoom, DOWN);
         currentRoom_ = nextRoom;
     }
-    currentRoom_->createDoor(firstRoom_, RIGHT);
     currentRoom_ = firstRoom_;
     /*
     fscanf(fp,"%s", &bitmapname);
@@ -53,7 +56,6 @@ void Level::dispatchEvent(ALLEGRO_EVENT* event)
 {
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
-        draw();
         if (bunny_->atDoor_ >= 0)
         {
             enter(currentRoom_->rooms_.at(bunny_->atDoor_));
@@ -71,6 +73,7 @@ void Level::enter(Room* room)
 {
     currentRoom_->leave();
     currentRoom_ = room;
+    room->enter();
     switch (bunny_->atDoor_)
     {
         case 0: bunny_->setPos(700, 345, 0); break;
@@ -121,4 +124,5 @@ void Level::draw()
         al_draw_bitmap_region(numbers_,(bunny_->keys_ % 10)*25,0,25,35,385,10,0);
     }
     else al_draw_bitmap_region(numbers_,(bunny_->keys_ % 10)*25,0,25,35,360,10,0);
+    currentRoom_->draw();
 }

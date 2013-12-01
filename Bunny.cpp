@@ -174,7 +174,6 @@ void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
             lastAnimation_ = al_get_time();
         }
         move();
-        draw();
     }
 }
 
@@ -201,13 +200,6 @@ int Bunny::handleCollision(Item* item)
         coins_ -= item->price_;
         return 1;
     }
-}
-
-void Bunny::handleCollision(Shot* shot)
-{
-    if (!shot->hurtsBunny_)
-        return;
-    hp_ -= shot->damage_;
 }
 
 int Bunny::handleCollision(Pickup* pickup)
@@ -253,11 +245,11 @@ Shot* Bunny::shoot()
     return NULL;
 }
 
-void Bunny::hurt()
+void Bunny::hurt(int damage)
 {
     if (immunityTime_ < al_get_time())
     {
-        hp_--;
+        hp_ -= damage;
         immunityTime_ = al_get_time() + 1;
     }
 }

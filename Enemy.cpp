@@ -187,9 +187,18 @@ Enemy::Enemy(int x, int y, int type, ALLEGRO_BITMAP* enemies, ALLEGRO_BITMAP* sh
     int shotPicNumber;
     enemyFile >> shotPicNumber;
     ALLEGRO_BITMAP* shotPicture = al_create_sub_bitmap(shots, shotPicNumber*20, 0, 20, 20);
+    int shootingstyle, movingstyle;
+    enemyFile >> shootingstyle;
+    enemyFile >> movingstyle;
+    /*
+    ShootingStyleFactory* SSFactory = new ShootingStyleFactory();
+    shootingStyle_ = SSFactory.create(shootingstyle);
+    MovingStyleFactory* MSfactory = new MovingStyleFactory();
+    movingStyle_ = MSfactory.create(movingstyle);
+    */
     enemyFile.close();
-    movingStyle_ = new ChasingMove(this, bunny);
-    shootingStyle_ = new DirectedShots(this, range, shotTime, shotPicture, bunny);
+    movingStyle_ = new RandomMove(this);
+    shootingStyle_ = new FourShots(this, range, shotTime, shotPicture);
 }
 
 Enemy::~Enemy()
@@ -215,7 +224,6 @@ void Enemy::dispatchEvent(ALLEGRO_EVENT* event)
                 animationState_ -= 4;
         }
         move();
-        draw();
     }
 }
 

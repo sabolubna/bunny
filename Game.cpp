@@ -153,3 +153,8 @@ void Game::back()
     state_ = MENU;
     subgame_ = mainmenu_;
 }
+
+void Game::draw()
+{
+    subgame_->draw();
+}
