@@ -209,6 +209,11 @@ void Room::enter()
     if (enemies_.size() > 0)
         for (int i = 0; i < doors_.size(); i++)
             doors_[i]->lock();
+
+    for (int i = 0; i < enemies_.size(); i++)
+    {
+        enemies_[i]->freeze();
+    }
 }
 
 void Room::leave()

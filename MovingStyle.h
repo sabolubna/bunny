@@ -7,6 +7,7 @@ class MovingStyle
     public:
         void virtual move() = 0;
         void virtual bounceFromWall(Side side) = 0;
+        void virtual freeze() = 0;
 };
 
 

@@ -5,6 +5,8 @@ Element::Element()
     step_ = 0;
     speedx_ = 0;
     speedy_ = 0;
+    width_ = 80;
+    height_ = 80;
 }
 
 Element::~Element()
@@ -43,6 +45,29 @@ void Element::setSpeed(int x, int y)
 {
     speedx_ = x;
     speedy_ = y;
+}
+
+void Element::setPos(int x, int y, int z)
+{
+    posx_ = x;
+    posy_ = y;
+    posz_ = z;
+}
+
+int* Element::getSize()
+{
+    int* size = new int[2];
+    size[0] = width_;
+    size[1] = height_;
+    return size;
+}
+
+double* Element::getPos()
+{
+    double* pos = new double[2];
+    pos[0] = posx_;
+    pos[1] = posy_;
+    return pos;
 }
 
 void Element::move()

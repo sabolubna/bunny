@@ -23,6 +23,11 @@ class RandomMove : public MovingStyle
                 }
             }
         }
+        void freeze()
+        {
+            enemy_->setSpeed(0, 0);
+            nextDirChange_ = al_get_time() + rand()%10/10+1;
+        }
         void bounceFromWall(Side side)
         {
             int newDirection;
@@ -61,11 +66,13 @@ class ChasingMove : public MovingStyle
                 double* enemyPos = enemy_->getPos();
                 double xdistance = bunnyPos[0] - enemyPos[0];
                 double ydistance = bunnyPos[1] - enemyPos[1];
-                double distanceSquared = xdistance*xdistance + ydistance*ydistance;
-                double speedx = xdistance * enemy_->step_ / sqrt(distanceSquared);
-                double speedy = ydistance * enemy_->step_ / sqrt(distanceSquared);
-                enemy_->setSpeed(speedx, speedy);
+                enemy_->setSpeed(xdistance, ydistance);
             }
+        }
+        void freeze()
+        {
+            enemy_->setSpeed(0, 0);
+            nextDirChange_ = al_get_time() + rand()%10/10+1;
         }
         void bounceFromWall(Side side)
         {
@@ -86,8 +93,12 @@ class FourShots : public ShootingStyle
             enemy_ = enemy;
             range_ = range;
             picture_ = picture;
-            lastShot_ = al_get_time() + rand()%10/10 + 1;
+            lastShot_ = al_get_time() + rand()%10/10;
             shotTime_ = shotTime;
+        }
+        void freeze()
+        {
+            lastShot_ = al_get_time() + rand()%10/10;
         }
         vector<Shot*> shoot()
         {
@@ -120,9 +131,13 @@ class DirectedShots : public ShootingStyle
             enemy_ = enemy;
             range_ = range;
             picture_ = picture;
-            lastShot_ = al_get_time() + rand()%10/10 + 1;
+            lastShot_ = al_get_time() + rand()%10/10;
             shotTime_ = shotTime;
             bunny_ = bunny;
+        }
+        void freeze()
+        {
+            lastShot_ = al_get_time() + rand()%10/10;
         }
         vector<Shot*> shoot()
         {
@@ -134,12 +149,10 @@ class DirectedShots : public ShootingStyle
             double* enemyPos = enemy_->getPos();
             int* enemySize = enemy_->getSize();
             double* bunnyPos = bunny_->getPos();
-            double xdistance = bunnyPos[0] - enemyPos[0];
-            double ydistance = bunnyPos[1] - enemyPos[1];
-            double distanceSquared = xdistance*xdistance + ydistance*ydistance;
-            double speedx = xdistance * enemy_->step_ / sqrt(distanceSquared);
-            double speedy = ydistance * enemy_->step_ / sqrt(distanceSquared);
-            shots.push_back(new Shot(picture_, enemyPos[0] + enemySize[0]/2 - 10, enemyPos[1] + 1, enemySize[1]/2, speedx, speedy,
+            int* bunnySize = bunny_->getSize();
+            double xdistance = bunnyPos[0] + bunnySize[0]/2 - enemyPos[0] - enemySize[0]/2;
+            double ydistance = bunnyPos[1] - bunnySize[1]/2 - enemyPos[1] + enemySize[1]/2;
+            shots.push_back(new Shot(picture_, enemyPos[0] + enemySize[0]/2 - 10, enemyPos[1] + 1, enemySize[1]/2, xdistance, ydistance,
                                      range_, true, 1));
             return shots;
         }
@@ -152,11 +165,54 @@ class DirectedShots : public ShootingStyle
         ALLEGRO_BITMAP* picture_;
 };
 
+class FiveRandomShots : public ShootingStyle
+{
+    public:
+        FiveRandomShots(Enemy* enemy, int range, double shotTime, ALLEGRO_BITMAP* picture)
+        {
+            enemy_ = enemy;
+            range_ = range;
+            picture_ = picture;
+            lastShot_ = al_get_time() + rand()%10/10;
+            shotTime_ = shotTime;
+        }
+        void freeze()
+        {
+            lastShot_ = al_get_time() + rand()%10/10;
+        }
+        vector<Shot*> shoot()
+        {
+            vector<Shot*> shots;
+            if (lastShot_ + shotTime_ > al_get_time())
+                return shots;
+
+            lastShot_ = al_get_time();
+            double* enemyPos = enemy_->getPos();
+            int* enemySize = enemy_->getSize();
+            for (int i = 0; i < 5; i++)
+            {
+                double speedx = rand()%200 - 100;
+                double speedy = rand()%200 - 100;
+                int range = range_ * (rand()%10 + 1)/10;
+                shots.push_back(new Shot(picture_, enemyPos[0] + enemySize[0]/2 - 10, enemyPos[1] + 1, enemySize[1]/2, speedx, speedy,
+                                         range, true, 1));
+            }
+            return shots;
+        }
+    protected:
+        Enemy* enemy_;
+        double lastShot_;
+        double shotTime_;
+        double range_;
+        ALLEGRO_BITMAP* picture_;
+
+};
+
 Enemy::Enemy(int x, int y, int type, ALLEGRO_BITMAP* enemies, ALLEGRO_BITMAP* shots, Bunny* bunny)
 {
     posx_ = x;
     posy_ = y;
-    posz_ = 0;
+    posz_ = 30;
     fstream enemyFile;
     enemyFile.open("files/enemies.txt", ios::in);
     for (int i = 0; i < type; i++)
@@ -174,7 +230,7 @@ Enemy::Enemy(int x, int y, int type, ALLEGRO_BITMAP* enemies, ALLEGRO_BITMAP* sh
     enemyFile >> height_;
     enemyFile >> pic_width_;
     enemyFile >> pic_height_;
-    animationState_ = 0;
+    animationState_ = rand()%8;
     enemyFile >> animationTime_;
     lastAnimation_ = al_get_time() - animationTime_;
     enemyFile >> step_;
@@ -188,17 +244,20 @@ Enemy::Enemy(int x, int y, int type, ALLEGRO_BITMAP* enemies, ALLEGRO_BITMAP* sh
     enemyFile >> shotPicNumber;
     ALLEGRO_BITMAP* shotPicture = al_create_sub_bitmap(shots, shotPicNumber*20, 0, 20, 20);
     int shootingstyle, movingstyle;
-    enemyFile >> shootingstyle;
     enemyFile >> movingstyle;
-    /*
-    ShootingStyleFactory* SSFactory = new ShootingStyleFactory();
-    shootingStyle_ = SSFactory.create(shootingstyle);
-    MovingStyleFactory* MSfactory = new MovingStyleFactory();
-    movingStyle_ = MSfactory.create(movingstyle);
-    */
+    enemyFile >> shootingstyle;
     enemyFile.close();
-    movingStyle_ = new RandomMove(this);
-    shootingStyle_ = new FourShots(this, range, shotTime, shotPicture);
+    switch (movingstyle)
+    {
+        case 0: movingStyle_ = new RandomMove(this); break;
+        case 1: movingStyle_ = new ChasingMove(this, bunny); break;
+    }
+    switch (shootingstyle)
+    {
+        case 0: shootingStyle_ = new FourShots(this, range, shotTime, shotPicture); break;
+        case 1: shootingStyle_ = new DirectedShots(this, range, shotTime, shotPicture, bunny); break;
+        case 2: shootingStyle_ = new FiveRandomShots(this, range, shotTime, shotPicture); break;
+    }
 }
 
 Enemy::~Enemy()
@@ -274,10 +333,8 @@ double* Enemy::getPos()
     return pos;
 }
 
-int* Enemy::getSize()
+void Enemy::freeze()
 {
-    int* size = new int[2];
-    size[0] = width_;
-    size[1] = height_;
-    return size;
+    movingStyle_->freeze();
+    shootingStyle_->freeze();
 }

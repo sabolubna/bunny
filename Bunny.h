@@ -16,15 +16,13 @@
 class Bunny : public Element
 {
     public:
-        Bunny(ALLEGRO_BITMAP* shots);
+        Bunny();
         ~Bunny();
-        void setPos(int x, int y, int z);
         void draw();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void handleCollision(Door* door);
         int handleCollision(Item* item);
         int handleCollision(Pickup* pickup);
-        double* getPos();
         void hurt(int damage);
         bool alive();
         int keys_;
@@ -42,7 +40,7 @@ class Bunny : public Element
         int jumpState_;
         double shotTime_;
         double lastShot_;
-        ALLEGRO_BITMAP* shotPicture_;
+        ALLEGRO_BITMAP* shots_, *shotPicture_;
         double range_;
         int damage_;
         Side shotDirection_;

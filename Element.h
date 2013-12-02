@@ -8,7 +8,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
-#include <Math.h>
+#include <math.h>
 
 using namespace std;
 
@@ -24,6 +24,9 @@ class Element
         virtual void move();
         bool collidesWith(Element* that);
         virtual void bounceFromWall(int borders[4]);
+        void setPos(int x, int y, int z);
+        double* getPos();
+        int* getSize();
         double posy_;
         double step_;
 

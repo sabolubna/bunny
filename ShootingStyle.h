@@ -7,6 +7,7 @@
 class ShootingStyle
 {
     public:
+        virtual void freeze() = 0;
         virtual vector<Shot*> shoot() = 0;
 
     protected:

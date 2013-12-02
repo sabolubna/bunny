@@ -12,31 +12,22 @@ Level::Level(int levelnum)
 
     numbers_ = al_load_bitmap("pics/numbers.bmp");
     al_convert_mask_to_alpha(numbers_, al_map_rgb(0, 0, 0));
-
-    shots_ = al_load_bitmap("pics/shots.png");
-    al_convert_mask_to_alpha(shots_, al_map_rgb(255, 255, 255));
-
-    enemies_ = al_load_bitmap("pics/enemies.png");
-    al_convert_mask_to_alpha(enemies_, al_map_rgb(255, 255, 255));
-
     background_ = al_load_bitmap("pics/level01.bmp");
     hearts_ = al_load_bitmap("pics/hearts.bmp");
-    bunny_ = new Bunny(shots_);
+    bunny_ = new Bunny();
+
     firstRoom_ = new Room(bunny_, NORMAL);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
-    /*
-    EnemyFactory* efactory = new EnemyFactory(firstnum, lastnum, enemies_, shots_, bunny_);
-    */
+    efactory_ = new EnemyFactory(0, 3, bunny_);
     for (int i = 0; i < 5; i++)
     {
         nextRoom = new Room(bunny_, NORMAL);
         for (int i = 0; i < 3; i++)
-            // nextRoom->insert(efactory->create();
-            nextRoom->insert(new Enemy(rand()%650+50, rand()%350+150, rand()%2, enemies_, shots_, bunny_));
+            nextRoom->insert(efactory_->create());
         nextRoom->insert(new Item(300, 400, rand()%10, 2, items_, numbers_));
         nextRoom->insert(new Pickup(650, 200, rand()%4, 0, pickups_, numbers_));
-        currentRoom_->createDoor(nextRoom, DOWN);
+        currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }
     currentRoom_ = firstRoom_;

@@ -23,7 +23,7 @@ class Enemy : public Element
         void move();
         vector<Shot*> shoot();
         double* getPos();
-        int* getSize();
+        void freeze();
 
     protected:
         int animationState_;

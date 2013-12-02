@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Bunny::Bunny(ALLEGRO_BITMAP* shots)
+Bunny::Bunny()
 {
     picture_ = al_load_bitmap("pics/bunny.png");
     al_convert_mask_to_alpha(picture_, al_map_rgb(255,0,0));
@@ -31,7 +31,9 @@ Bunny::Bunny(ALLEGRO_BITMAP* shots)
     }
     shotTime_ = 0.6;
     lastShot_ = al_get_time() - shotTime_;
-    shotPicture_ = al_create_sub_bitmap(shots, 0, 0, 20, 20);
+    shots_ = al_load_bitmap("pics/shots.png");
+    al_convert_mask_to_alpha(shots_, al_map_rgb(255, 255, 255));
+    shotPicture_ = al_create_sub_bitmap(shots_, 0, 0, 20, 20);
     range_ = 300;
     damage_ = 10;
     shooting_ = false;
@@ -177,13 +179,6 @@ void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
     }
 }
 
-void Bunny::setPos(int x, int y, int z)
-{
-    posx_ = x;
-    posy_ = y;
-    posz_ = z;
-}
-
 void Bunny::handleCollision(Door* door)
 {
     if (door->fits(posx_, posy_, width_, height_) && !door->locked_ && (!door->keyNeeded_ || keys_ > 0))
@@ -257,12 +252,4 @@ void Bunny::hurt(int damage)
 bool Bunny::alive()
 {
     return hp_ > 0;
-}
-
-double* Bunny::getPos()
-{
-    double* pos = new double[2];
-    pos[0] = posx_;
-    pos[1] = posy_;
-    return pos;
 }
