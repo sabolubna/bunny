@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* items, ALLEGRO_BITMAP* numbers)
+Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* picture, ALLEGRO_BITMAP* numbers)
 {
     posx_ = x;
     posy_ = y;
@@ -11,7 +11,7 @@ Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* items, ALLEGRO_BITM
     pic_height_ = 45;
     number_ = num;
     price_ = price;
-    picture_ = al_create_sub_bitmap(items, number_%10*45, number_/10*45, 45, 45);
+    picture_ = picture;
     numbers_ = numbers;
 }
 

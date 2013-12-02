@@ -52,7 +52,8 @@ int main()
         if (redraw && al_is_event_queue_empty(queue))
         {
             game.draw();
-            redraw = false;
+            al_flip_display();
+            //redraw = false;
         }
         game.dispatchEvent(&event);
     }

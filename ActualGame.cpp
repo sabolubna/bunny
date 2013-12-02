@@ -40,7 +40,6 @@ void ActualGame::dispatchEvent(ALLEGRO_EVENT *event)
             al_rest(1);
         }
         level_->dispatchEvent(event);
-        al_flip_display();
     }
     else if (event->type == ALLEGRO_EVENT_KEY_DOWN
         && event->keyboard.keycode == ALLEGRO_KEY_ESCAPE)

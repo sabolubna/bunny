@@ -1,6 +1,6 @@
 #include "Room.h"
 
-Room::Room(Bunny* bunny, RoomType type)
+Room::Room(Bunny* bunny, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory)
 {
     type_ = type;
     borders_[UP] = 100;
@@ -8,6 +8,8 @@ Room::Room(Bunny* bunny, RoomType type)
     borders_[RIGHT] = 750;
     borders_[DOWN] = 550;
     bunny_ = bunny;
+    ifactory_ = ifactory;
+    pfactory_ = pfactory;
 }
 
 Room::~Room()
@@ -173,7 +175,13 @@ void Room::findCollisions()
                         {
                             for (int k = 0; k < doors_.size(); k++)
                                 doors_[k]->unlock();
-                            //insert(new Pickup(383, 308, rand()%4, 0, pickups_, numbers_));
+                            if (type_ == BOSS)
+                            {
+                                insert(ifactory_->create(type_));
+                                //insert(new portal());
+                            }
+                            else
+                                insert(pfactory_->create(type_));
                         }
                     }
                     shots_.erase(shots_.begin()+i);

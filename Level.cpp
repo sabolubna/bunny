@@ -1,35 +1,34 @@
 #include "Level.h"
 
-
 Level::Level(int levelnum)
 {
     srand(time(NULL));
-    items_ = al_load_bitmap("pics/items.png");
-    al_convert_mask_to_alpha(items_, al_map_rgb(255, 255, 255));
-
-    pickups_ = al_load_bitmap("pics/pickups.png");
-    al_convert_mask_to_alpha(pickups_, al_map_rgb(255, 255, 255));
 
     numbers_ = al_load_bitmap("pics/numbers.bmp");
     al_convert_mask_to_alpha(numbers_, al_map_rgb(0, 0, 0));
+
     background_ = al_load_bitmap("pics/level01.bmp");
     hearts_ = al_load_bitmap("pics/hearts.bmp");
     bunny_ = new Bunny();
 
-    firstRoom_ = new Room(bunny_, NORMAL);
+    efactory_ = new EnemyFactory(0, 3, bunny_);
+    ifactory_ = new ItemFactory(0, 5, bunny_);
+    pfactory_ = new PickupFactory();
+    firstRoom_ = new Room(bunny_, NORMAL, ifactory_, pfactory_);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
-    efactory_ = new EnemyFactory(0, 3, bunny_);
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 3; i++)
     {
-        nextRoom = new Room(bunny_, NORMAL);
-        for (int i = 0; i < 3; i++)
+        nextRoom = new Room(bunny_, NORMAL, ifactory_, pfactory_);
+        for (int i = 0; i < 2; i++)
             nextRoom->insert(efactory_->create());
-        nextRoom->insert(new Item(300, 400, rand()%10, 2, items_, numbers_));
-        nextRoom->insert(new Pickup(650, 200, rand()%4, 0, pickups_, numbers_));
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }
+    nextRoom = new Room(bunny_, BOSS, ifactory_, pfactory_);
+    for (int i = 0; i < 5; i++)
+        nextRoom->insert(efactory_->create());
+    currentRoom_->createDoor(nextRoom, RIGHT);
     currentRoom_ = firstRoom_;
     /*
     fscanf(fp,"%s", &bitmapname);

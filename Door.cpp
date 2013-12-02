@@ -107,9 +107,9 @@ void Door::draw()
     if (locked_)
         switch(side_)
         {
-            case LEFT: al_draw_bitmap_region(picture_, 0, 480, width_+4, height_+11, posx_ - 5, posy_ - height_ - 5, flag); break;
-            case UP: al_draw_bitmap_region(picture_, 5, 480, width_+11, height_+4, posx_ - 5, posy_ - height_ - 5, flag); break;
-            case RIGHT: al_draw_bitmap_region(picture_, 0, 480, width_+4, height_+11, posx_, posy_ - height_ - 5, flag); break;
-            case DOWN: al_draw_bitmap_region(picture_, 5, 480, width_+11, height_+4, posx_ - 5, posy_ - height_, flag); break;
+            case LEFT: al_draw_bitmap_region(picture_, 0, 560, width_+4, height_+11, posx_ - 5, posy_ - height_ - 5, flag); break;
+            case UP: al_draw_bitmap_region(picture_, 5, 560, width_+11, height_+4, posx_ - 5, posy_ - height_ - 5, flag); break;
+            case RIGHT: al_draw_bitmap_region(picture_, 0, 560, width_+4, height_+11, posx_, posy_ - height_ - 5, flag); break;
+            case DOWN: al_draw_bitmap_region(picture_, 5, 560, width_+11, height_+4, posx_ - 5, posy_ - height_, flag); break;
         }
 }

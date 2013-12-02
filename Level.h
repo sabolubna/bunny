@@ -4,6 +4,8 @@
 #include "main.h"
 #include "Room.h"
 #include "EnemyFactory.h"
+#include "ItemFactory.h"
+#include "PickupFactory.h"
 #include <string>
 #include <iostream>
 #include <allegro5/allegro.h>
@@ -20,11 +22,13 @@ class Level
         void draw();
 
     protected:
-        ALLEGRO_BITMAP *background_, *numbers_, *hearts_, *items_, *pickups_;
+        ALLEGRO_BITMAP *background_, *numbers_, *hearts_;
         Room* firstRoom_;
         Room* currentRoom_;
         Bunny* bunny_;
         EnemyFactory* efactory_;
+        ItemFactory* ifactory_;
+        PickupFactory* pfactory_;
 
     private:
 };

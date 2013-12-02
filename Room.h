@@ -15,11 +15,13 @@
 #include "Shot.h"
 #include "Pickup.h"
 #include "Enemy.h"
+#include "ItemFactory.h"
+#include "PickupFactory.h"
 
 class Room
 {
     public:
-        Room(Bunny* bunny, RoomType type);
+        Room(Bunny* bunny, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory);
         ~Room();
         void collectElements();
         void dispatchEvent(ALLEGRO_EVENT* event);
@@ -38,12 +40,15 @@ class Room
     protected:
         int borders_[4];
         Bunny* bunny_;
+        ALLEGRO_BITMAP *itempics_, *pickuppics_, *numbers_;
         vector<Element*> elements_;
         vector<Door*> doors_;
         vector<Item*> items_;
         vector<Shot*> shots_;
         vector<Pickup*> pickups_;
         vector<Enemy*> enemies_;
+        ItemFactory* ifactory_;
+        PickupFactory* pfactory_;
 
     private:
 };
