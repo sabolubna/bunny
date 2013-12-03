@@ -15,11 +15,12 @@ class Level
 {
     friend class ActualGame;
     public:
-        Level(int levelnum);
+        Level();
         ~Level();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void enter(Room* room);
         void draw();
+        void nextLevel();
 
     protected:
         ALLEGRO_BITMAP *background_, *numbers_, *hearts_;
@@ -29,6 +30,9 @@ class Level
         EnemyFactory* efactory_;
         ItemFactory* ifactory_;
         PickupFactory* pfactory_;
+        bool usedLevels_[LVL_CNT];
+        int levelsPlayed_;
+        bool playing_;
 
     private:
 };

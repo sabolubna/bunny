@@ -6,7 +6,7 @@
 class EnemyFactory
 {
     public:
-        EnemyFactory(int first, int last, Bunny* bunny);
+        EnemyFactory(Bunny* bunny);
         ~EnemyFactory();
         Enemy* create();
         void setRange(int first, int last);

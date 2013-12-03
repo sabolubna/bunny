@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(int levelnum)
+Level::Level()
 {
     srand(time(NULL));
 
@@ -11,9 +11,55 @@ Level::Level(int levelnum)
     hearts_ = al_load_bitmap("pics/hearts.bmp");
     bunny_ = new Bunny();
 
-    efactory_ = new EnemyFactory(0, 3, bunny_);
-    ifactory_ = new ItemFactory(0, 5, bunny_);
+    efactory_ = new EnemyFactory(bunny_);
+    ifactory_ = new ItemFactory(bunny_);
     pfactory_ = new PickupFactory();
+
+    for (int i = 0; i < LVL_CNT; i++)
+    {
+        usedLevels_[i] = false;
+    }
+    levelsPlayed_ = 0;
+    playing_ = true;
+    nextLevel();
+}
+
+Level::~Level()
+{
+    //dtor
+}
+
+void Level::nextLevel()
+{
+    printf("nextLevel\n");
+    if (levelsPlayed_ == LVL_CNT)
+    {
+        printf("win\n");
+        playing_ = false;
+        return;
+    }
+    int type = rand()%LVL_CNT;
+    while (usedLevels_[type])
+    {
+        type = rand()%LVL_CNT;
+    }
+    usedLevels_[type] = true;
+    levelsPlayed_++;
+
+    fstream file;
+    file.open("files/levels.txt", ios::in);
+    for (int i = 0; i < type; i++)
+    {
+        string s;
+        getline(file, s);
+    }
+    int firstItem, lastItem, firstEnemy, lastEnemy;
+    file >> firstItem;
+    file >> lastItem;
+    file >> firstEnemy;
+    file >> lastEnemy;
+    ifactory_->setRange(firstItem, lastItem);
+    efactory_->setRange(firstEnemy, lastEnemy);
     firstRoom_ = new Room(bunny_, NORMAL, ifactory_, pfactory_);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
@@ -30,16 +76,6 @@ Level::Level(int levelnum)
         nextRoom->insert(efactory_->create());
     currentRoom_->createDoor(nextRoom, RIGHT);
     currentRoom_ = firstRoom_;
-    /*
-    fscanf(fp,"%s", &bitmapname);
-        fscanf(fp, "%d %d %d %d %d %d", &level.bossfirst, &level.bosslast, &level.enemyfirst, &level.enemylast,
-            &level.itemfirst, &level.itemlast);
-            */
-}
-
-Level::~Level()
-{
-    //dtor
 }
 
 void Level::dispatchEvent(ALLEGRO_EVENT* event)
@@ -49,6 +85,11 @@ void Level::dispatchEvent(ALLEGRO_EVENT* event)
         if (bunny_->atDoor_ >= 0)
         {
             enter(currentRoom_->rooms_.at(bunny_->atDoor_));
+        }
+        if (bunny_->atPortal_)
+        {
+            bunny_->atPortal_ = false;
+            nextLevel();
         }
     }
     else if (event->type == ALLEGRO_EVENT_KEY_DOWN

@@ -1,6 +1,5 @@
 #include "Bunny.h"
 
-using namespace std;
 
 Bunny::Bunny()
 {
@@ -20,6 +19,7 @@ Bunny::Bunny()
     lastAnimation_ = al_get_time() - animationTime_;
     jumpState_ = 0;
     atDoor_ = -1;
+    atPortal_ = false;
     keys_ = 1;
     bombs_ = 1;
     coins_ = 3;
@@ -70,10 +70,10 @@ void Bunny::draw()
         jumpState_ = 0;
     al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+5, width_/2, height_/2, al_map_rgba(0,0,0,50));
     if (immunityTime_ < al_get_time())
-        al_draw_scaled_bitmap(picture_,0+a*200,0+dir*392,200,392,posx_,posy_-90,50,98,0);
+        al_draw_scaled_bitmap(picture_,0+a*200,0+dir*392,pic_width_*4,pic_height_*4,posx_,posy_-90,pic_width_,pic_height_,0);
     else
-        al_draw_tinted_scaled_bitmap(picture_,al_map_rgba(200,100,100,100),0+a*200,0+dir*392,200,392,
-                                     posx_,posy_-90,50,98,0);
+        al_draw_tinted_scaled_bitmap(picture_,al_map_rgba(200,100,100,100),0+a*200,0+dir*392,pic_width_*4,pic_height_*4,posx_,
+                                     posy_-90,pic_width_,pic_height_,0);
 }
 
 void Bunny::dispatchEvent(ALLEGRO_EVENT* event)

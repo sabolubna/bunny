@@ -8,7 +8,7 @@
 class ItemFactory
 {
     public:
-        ItemFactory(int first, int last, Bunny* bunny);
+        ItemFactory(Bunny* bunny);
         ~ItemFactory();
         Item* create(RoomType type);
         void setRange(int first, int last);

@@ -53,12 +53,10 @@ int main()
         {
             game.draw();
             al_flip_display();
-            //redraw = false;
+            redraw = false;
         }
         game.dispatchEvent(&event);
     }
-
-    printf("udalo sie!");
     al_destroy_display(display);
     return 0;
 }

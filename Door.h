@@ -24,6 +24,7 @@ class Door : public Element
     protected:
         void init(Side side, RoomType type);
         RoomType type_;
+        ALLEGRO_BITMAP* doorspic_;
 };
 
 #endif // DOOR_H

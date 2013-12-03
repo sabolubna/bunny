@@ -18,13 +18,12 @@ class ActualGame : public Subgame
         ActualGame(Delegate* delegate);
         ~ActualGame();
         void dispatchEvent(ALLEGRO_EVENT *event);
-        void nextLevel();
         void draw();
 
     protected:
         Delegate* delegate_;
         Level* level_;
-        bool usedlevels_[LEVELTYPES];
+
     private:
 };
 

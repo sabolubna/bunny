@@ -1,13 +1,12 @@
 #ifndef Bunny_H
 #define Bunny_H
 
+#include <string>
 #include "Element.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
-#include <string>
 #include <time.h>
-#include <typeinfo>
 #include "Door.h"
 #include "Item.h"
 #include "Shot.h"
@@ -27,6 +26,7 @@ class Bunny : public Element
         bool alive();
         int keys_;
         int atDoor_;
+        bool atPortal_;
         int bombs_;
         int coins_;
         int hearts_;

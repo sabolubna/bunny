@@ -55,17 +55,17 @@ void Room::collectElements()
     {
         elements_.push_back(enemies_[i]);
     }
-    sort (elements_.begin(), elements_.end(), compare);
+    sort(elements_.begin(), elements_.end(), compare);
 }
 
 void Room::dispatchEvent(ALLEGRO_EVENT* event)
 {
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
-        int i = 0;
         Shot* shot = bunny_->shoot();
         if (shot != NULL)
             shots_.push_back(shot);
+
         for (int i = 0; i < enemies_.size(); i++)
         {
             vector<Shot*> shots = enemies_[i]->shoot();
@@ -73,6 +73,7 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
                 for (int i = 0; i < shots.size(); i++)
                     shots_.push_back(shots[i]);
         }
+        int i = 0;
         while (i < shots_.size())
         {
             shots_[i]->bounceFromWall(borders_);
@@ -90,6 +91,10 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
         for (int i = 0; i < elements_.size(); i++)
         {
             elements_[i]->dispatchEvent(event);
+        }
+        for (int i = 0; i < portals_.size(); i++)
+        {
+            portals_[i]->dispatchEvent(event);
         }
     }
 }
@@ -178,7 +183,7 @@ void Room::findCollisions()
                             if (type_ == BOSS)
                             {
                                 insert(ifactory_->create(type_));
-                                //insert(new portal());
+                                portals_.push_back(new Portal());
                             }
                             else
                                 insert(pfactory_->create(type_));
@@ -193,6 +198,16 @@ void Room::findCollisions()
             }
             i++;
         }
+    }
+    //collisions with portals
+    for (int i = 0; i < portals_.size(); i++)
+    {
+        if (bunny_->collidesWith(portals_[i]) && !portals_[i]->locked_)
+        {
+            bunny_->atPortal_ = true;
+        }
+        else
+            portals_[i]->locked_ = false;
     }
     bunny_->bounceFromWall(borders_);
 }
@@ -234,6 +249,10 @@ void Room::draw()
     for (int i = 0; i < doors_.size(); i++)
     {
         doors_[i]->draw();
+    }
+    for (int i = 0; i < portals_.size(); i++)
+    {
+        portals_[i]->draw();
     }
     collectElements();
     for (int i = 0; i < elements_.size(); i++)

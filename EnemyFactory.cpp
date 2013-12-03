@@ -1,6 +1,6 @@
 #include "EnemyFactory.h"
 
-EnemyFactory::EnemyFactory(int first, int last, Bunny* bunny)
+EnemyFactory::EnemyFactory(Bunny* bunny)
 {
     bunny_ = bunny;
 
@@ -9,7 +9,6 @@ EnemyFactory::EnemyFactory(int first, int last, Bunny* bunny)
 
     enemies_ = al_load_bitmap("pics/enemies.png");
     al_convert_mask_to_alpha(enemies_, al_map_rgb(255, 255, 255));
-    setRange(first, last);
 }
 
 EnemyFactory::~EnemyFactory()

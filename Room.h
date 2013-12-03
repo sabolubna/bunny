@@ -8,7 +8,6 @@
 #include "Element.h"
 #include <vector>
 #include <algorithm>
-#include <typeinfo>
 #include "Door.h"
 #include "Bunny.h"
 #include "Item.h"
@@ -17,6 +16,7 @@
 #include "Enemy.h"
 #include "ItemFactory.h"
 #include "PickupFactory.h"
+#include "Portal.h"
 
 class Room
 {
@@ -47,6 +47,7 @@ class Room
         vector<Shot*> shots_;
         vector<Pickup*> pickups_;
         vector<Enemy*> enemies_;
+        vector<Portal*> portals_;
         ItemFactory* ifactory_;
         PickupFactory* pfactory_;
 

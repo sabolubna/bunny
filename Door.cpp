@@ -24,8 +24,8 @@ void Door::init(Side side, RoomType type)
     type_ = type;
     keyNeeded_ = false;
     locked_ = false;
-    ALLEGRO_BITMAP* doors = al_load_bitmap("pics/doors.png");
-    al_convert_mask_to_alpha(doors, al_map_rgb(255,255,255));
+    doorspic_ = al_load_bitmap("pics/doors.png");
+    al_convert_mask_to_alpha(doorspic_, al_map_rgb(255,255,255));
     side_ = side;
     switch (side)
     {
@@ -63,9 +63,9 @@ void Door::init(Side side, RoomType type)
         }
     }
     if (side_ == LEFT || side_ == RIGHT)
-        picture_ = al_create_sub_bitmap(doors, 0, 0, width_, height_*7);
+        picture_ = al_create_sub_bitmap(doorspic_, 0, 0, width_, height_*7+11);
     else
-        picture_ = al_create_sub_bitmap(doors, 45, 0, width_, width_*7);
+        picture_ = al_create_sub_bitmap(doorspic_, 45, 0, width_+4, width_*7+11);
     pic_width_ = width_;
     pic_height_ = height_;
 }
