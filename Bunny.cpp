@@ -38,6 +38,7 @@ Bunny::Bunny()
     damage_ = 10;
     shooting_ = false;
     immunityTime_ = al_get_time();
+    spaceItem_ = NULL;
 }
 
 Bunny::~Bunny()
@@ -184,16 +185,6 @@ void Bunny::handleCollision(Door* door)
     if (door->fits(posx_, posy_, width_, height_) && !door->locked_ && (!door->keyNeeded_ || keys_ > 0))
     {
         atDoor_ = door->side_;
-    }
-}
-
-int Bunny::handleCollision(Item* item)
-{
-    if (coins_ >= item->price_)
-    {
-        itemsCollected[item->number_] = true;
-        coins_ -= item->price_;
-        return 1;
     }
 }
 

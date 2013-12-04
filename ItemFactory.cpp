@@ -5,6 +5,9 @@ ItemFactory::ItemFactory(Bunny* bunny)
     items_ = al_load_bitmap("pics/items.png");
     al_convert_mask_to_alpha(items_, al_map_rgb(255, 255, 255));
 
+    shots_ = al_load_bitmap("pics/shots.png");
+    al_convert_mask_to_alpha(shots_, al_map_rgb(255, 255, 255));
+
     numbers_ = al_load_bitmap("pics/numbers.bmp");
     al_convert_mask_to_alpha(numbers_, al_map_rgb(0, 0, 0));
 
@@ -33,7 +36,7 @@ Item* ItemFactory::create(RoomType type)
         }
         bunny_->itemsCollected[r] = true;
         ALLEGRO_BITMAP* picture = al_create_sub_bitmap(items_, r%10*45, r/10*45, 45, 45);
-        Item* item = new Item(378, 450, r, 0, picture, numbers_);
+        Item* item = new Item(378, 450, r, 0, picture, numbers_, shots_);
         return item;
     }
     else
@@ -44,7 +47,7 @@ Item* ItemFactory::create(RoomType type)
             r = rand()%(lastItem_ - firstItem_ + 1) + firstItem_;
         }
         ALLEGRO_BITMAP* picture = al_create_sub_bitmap(items_, r%10*45, r/10*45, 45, 45);
-        Item* item = new Item(378, 308, r, 0, picture, numbers_);
+        Item* item = new Item(378, 308, r, 0, picture, numbers_, shots_);
         return item;
     }
 }

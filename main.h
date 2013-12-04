@@ -2,6 +2,7 @@
 #define MAIN_H_INCLUDED
 
 #define ITEM_CNT 10
+
 #define LVL_CNT 2
 
 enum GameState {MENU, PLAYING, PAUSE, ABOUT};

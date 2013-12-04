@@ -113,9 +113,9 @@ void Room::findCollisions()
     int i = 0;
     while (i < items_.size())
     {
-        if (bunny_->collidesWith(items_[i]))
+        if (bunny_->collidesWith(items_[i]) && items_[i]->lying())
         {
-            if (bunny_->handleCollision(items_[i]) == 1)
+            if (items_[i]->handleCollision(bunny_, this))
             {
                 Item* toDelete = items_[i];
                 items_.erase(items_.begin()+i);
@@ -222,6 +222,11 @@ void Room::insert(Pickup* pickup)
     pickups_.push_back(pickup);
 }
 
+void Room::newPickup(PickupType ptype)
+{
+    pickups_.push_back(pfactory_->create(type_, ptype));
+}
+
 void Room::insert(Enemy* enemy)
 {
     enemies_.push_back(enemy);
@@ -246,6 +251,8 @@ void Room::leave()
 
 void Room::draw()
 {
+    if (bunny_->spacePicture_ != NULL)
+        al_draw_bitmap(bunny_->spacePicture_, 5, 5, 0);
     for (int i = 0; i < doors_.size(); i++)
     {
         doors_[i]->draw();

@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* picture, ALLEGRO_BITMAP* numbers)
+Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* picture, ALLEGRO_BITMAP* numbers, ALLEGRO_BITMAP* shots)
 {
     posx_ = x;
     posy_ = y;
@@ -13,6 +13,7 @@ Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* picture, ALLEGRO_BI
     price_ = price;
     picture_ = picture;
     numbers_ = numbers;
+    shots_ = shots;
 }
 
 Item::~Item()
@@ -39,169 +40,163 @@ void Item::draw()
     }
 }
 
-/*void activate()
+bool Item::handleCollision(Bunny* bunny, RoomEffect* room)
+{
+    if (bunny->coins_ >= price_)
+    {
+        bunny->itemsCollected[number_] = true;
+        bunny->coins_ -= price_;
+        return activate(bunny, room);
+    }
+}
+
+bool Item::lying()
+{
+    return posz_ == 0;
+}
+
+bool Item::pickUpSpaceItem(Bunny* bunny)
+{
+    if (bunny->spaceItem_ != NULL)
+    {
+        int num = number_;
+        number_ = bunny->spaceItem_;
+        bunny->spaceItem_ = num;
+
+        ALLEGRO_BITMAP* pic;
+        pic = picture_;
+        picture_ = bunny->spacePicture_;
+        bunny->spacePicture_ = pic;
+        posz_ = 30;
+        return false;
+    }
+    bunny->spaceItem_ = number_;
+    bunny->spacePicture_ = picture_;
+    return true;
+}
+
+bool Item::activate(Bunny* bunny, RoomEffect* room)
 {
     double tmp;
-    switch (num)
+    switch (number_)
     {
         case 0: //rabbits heart
         {
-            game->bunny.hearts++;
-            game->bunny.hp+=2;
+            bunny->hearts_++;
+            bunny->hp_ += 2;
             break;
         }
         case 1: // coin bag
         {
-            game->coins+=10;
-            if (game->coins > 99)
-                game->coins = 99;
+            bunny->coins_ += 10;
+            if (bunny->coins_ > 99)
+                bunny->coins_ = 99;
             break;
         }
         case 2: // plonaca kapucha
         {
-            game->bunny.shotpic = al_create_sub_bitmap(game->shotpics,60,0,20,20);
-            game->bunny.range += 200;
+            bunny->shotPicture_ = al_create_sub_bitmap(shots_,60,0,20,20);
+            bunny->range_ += 200;
             break;
         }
         case 3: // worek marchewek
         {
-            if (game->spaceitem >= 0)
-            {
-                game->room->items[i].number = game->spaceitem;
-                game->room->items[i].taken = 0;
-                tmp = game->spaceleft;
-                game->spaceleft = game->room->items[i].spaceleft;
-                game->room->items[i].spaceleft = tmp;
-            }
-            game->spaceitem = 3;
-            break;
+            return pickUpSpaceItem(bunny);
         }
         case 4: // mystery worek
         {
-            if (game->spaceitem >= 0)
-            {
-                game->room->items[i].number = game->spaceitem;
-                game->room->items[i].taken = 0;
-                tmp = game->spaceleft;
-                game->spaceleft = game->room->items[i].spaceleft;
-                game->room->items[i].spaceleft = tmp;
-            }
-            game->spaceitem = 4;
-            break;
+            return pickUpSpaceItem(bunny);
         }
         case 5: // candy rush
         {
-            game->bunny.speed -= 0.001;
-            game->bunny.kicspeed -= 0.02;
+            bunny->step_ += 0.5;
+            if (bunny->step_ < 6)
+                bunny->step_ = 6;
+            bunny->animationTime_ -= 0.02;
+            if (bunny->step_ < 6)
+                bunny->step_ = 6;
             break;
         }
         case 6: // bomb bag
         {
-            game->bombs += 10;
-            if (game->bombs > 99)
-                game->bombs = 99;
+            bunny->bombs_ += 10;
+            if (bunny->bombs_ > 99)
+                bunny->bombs_ = 99;
             break;
         }
         case 7: // key bag
         {
-            game->keys += 10;
-            if (game->keys > 99)
-                game->keys = 99;
+            bunny->keys_ += 10;
+            if (bunny->keys_ > 99)
+                bunny->keys_ = 99;
             break;
         }
         case 8: //lasergun
-        {
-            game->bunny.shottype = 1;
-            game->bunny.shotfreq = 0.6;
-            game->bunny.range = 700;
+        {/*
+            bunny->shottype = 1;
+            bunny->shotfreq = 0.6;
+            bunny->range = 700;*/
             break;
         }
         case 9: //duracell
-        {
-            game->bunny.battery += 2;
+        {/*
+            bunny->battery += 2;*/
             break;
         }
         case 10: // buciki
-        {
-            game->bunny.boots += 1;
+        {/*
+            bunny->boots += 1;*/
             break;
         }
         //bonus items
         //pokemon level
         case 15: //lvlup candy
         {
-            game->bunny.dmg += 10;
-            if (game->bunny.dmg > 60)
-                game->bunny.dmg = 60;
-            game->bunny.shotfreq -= 0.1;
-            if (game->bunny.shotfreq < 0.1)
-                game->bunny.shotfreq = 0.1;
-            game->bunny.range += 80;
-            if (game->bunny.range > 700)
-                game->bunny.range = 700;
-            game->bunny.speed -= 0.001;
-            if (game->bunny.speed < 0.004)
-                game->bunny.speed = 0.004;
-            game->bunny.hearts++;
-            if (game->bunny.hearts > 6)
+            bunny->damage_ += 10;
+            if (bunny->damage_ > 60)
+                bunny->damage_ = 60;
+            bunny->shotTime_ -= 0.1;
+            if (bunny->shotTime_ < 0.1)
+                bunny->shotTime_ = 0.1;
+            bunny->range_ += 80;
+            if (bunny->range_ > 700)
+                bunny->range_ = 700;
+            bunny->step_ += 0.5;
+            if (bunny->step_ < 6)
+                bunny->step_ = 6;
+            bunny->hearts_++;
+            if (bunny->hearts_ > 6)
             {
-                game->bunny.hearts = 6;
-                game->bunny.hp = game->bunny.hearts*2;
+                bunny->hearts_ = 6;
+                bunny->hp_ = bunny->hearts_*2;
             }
             break;
         }
         case 16: // pokeball
         {
-            game->bunny.shotpic = al_create_sub_bitmap(game->shotpics,41,0,20,20);
+            bunny->shotPicture_ = al_create_sub_bitmap(shots_,60,0,20,20);
             break;
         }
         case 17: // squirtle's glasses
         {
-            if (game->spaceitem >= 0)
-            {
-                game->room->items[i].number = game->spaceitem;
-                game->room->items[i].taken = 0;
-                tmp = game->spaceleft;
-                game->spaceleft = game->room->items[i].spaceleft;
-                game->room->items[i].spaceleft = tmp;
-            }
-            game->spaceitem = 17;
-            break;
+            return pickUpSpaceItem(bunny);
         }
         case 18: // ash cap GOTTA CATCH EM ALL
         {
-            newpickup(game, game->room, 0, rand()%665+50, rand()%415+100,0);
-            newpickup(game, game->room, 1, rand()%665+50, rand()%415+100,0);
-            newpickup(game, game->room, 2, rand()%665+50, rand()%415+100,0);
-            newpickup(game, game->room, 3, rand()%665+50, rand()%415+100,0);
+            room->newPickup(CARROT);
+            room->newPickup(BOMB);
+            room->newPickup(KEY);
+            room->newPickup(COIN);
             break;
         }
         case 51: // niebieski portalgun
         {
-            if (game->spaceitem >= 0)
-            {
-                game->room->items[i].number = game->spaceitem;
-                game->room->items[i].taken = 0;
-                tmp = game->spaceleft;
-                game->spaceleft = game->room->items[i].spaceleft;
-                game->room->items[i].spaceleft = tmp;
-            }
-            game->spaceitem = 3;
-            break;
+            return pickUpSpaceItem(bunny);
         }
         case 52: //pomaranczowy portal gun
         {
-            if (game->spaceitem >= 0)
-            {
-                game->room->items[i].number = game->spaceitem;
-                game->room->items[i].taken = 0;
-                tmp = game->spaceleft;
-                game->spaceleft = game->room->items[i].spaceleft;
-                game->room->items[i].spaceleft = tmp;
-            }
-            game->spaceitem = 4;
-            break;
+            return pickUpSpaceItem(bunny);
         }
     }
-}*/
-
+    return true;
+}

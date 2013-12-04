@@ -8,7 +8,6 @@
 #include <allegro5/allegro_primitives.h>
 #include <time.h>
 #include "Door.h"
-#include "Item.h"
 #include "Shot.h"
 #include "Pickup.h"
 
@@ -20,7 +19,6 @@ class Bunny : public Element
         void draw();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void handleCollision(Door* door);
-        int handleCollision(Item* item);
         int handleCollision(Pickup* pickup);
         void hurt(int damage);
         bool alive();
@@ -33,16 +31,19 @@ class Bunny : public Element
         int hp_;
         bool itemsCollected[ITEM_CNT];
         Shot* shoot();
+        int damage_;
+        ALLEGRO_BITMAP *shotPicture_;
+        double range_;
+        double animationTime_;
+        double shotTime_;
+        int spaceItem_;
+        ALLEGRO_BITMAP* spacePicture_;
 
     protected:
         double lastAnimation_;
-        double animationTime_;
         int jumpState_;
-        double shotTime_;
         double lastShot_;
-        ALLEGRO_BITMAP* shots_, *shotPicture_;
-        double range_;
-        int damage_;
+        ALLEGRO_BITMAP* shots_;
         Side shotDirection_;
         bool shooting_;
         double immunityTime_;

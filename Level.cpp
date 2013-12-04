@@ -66,8 +66,9 @@ void Level::nextLevel()
     for (int i = 0; i < 3; i++)
     {
         nextRoom = new Room(bunny_, NORMAL, ifactory_, pfactory_);
-        for (int i = 0; i < 2; i++)
-            nextRoom->insert(efactory_->create());
+        //for (int i = 0; i < 2; i++)
+            //nextRoom->insert(efactory_->create());
+        nextRoom->insert(ifactory_->create(NORMAL));
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }

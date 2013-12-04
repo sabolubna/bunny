@@ -18,7 +18,7 @@
 #include "PickupFactory.h"
 #include "Portal.h"
 
-class Room
+class Room : public RoomEffect
 {
     public:
         Room(Bunny* bunny, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory);
@@ -29,6 +29,7 @@ class Room
         void createDoor(Room* that, Side side);
         void insert(Item* item);
         void insert(Pickup* pickup);
+        void newPickup(PickupType type);
         void insert(Enemy* enemy);
         void leave();
         void enter();

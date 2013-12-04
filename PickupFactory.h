@@ -9,6 +9,7 @@ class PickupFactory
         PickupFactory();
         ~PickupFactory();
         Pickup* create(RoomType type);
+        Pickup* create(RoomType type, PickupType ptype);
 
     protected:
         ALLEGRO_BITMAP* numbers_, *pickups_;

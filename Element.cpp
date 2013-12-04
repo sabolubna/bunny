@@ -2,6 +2,7 @@
 
 Element::Element()
 {
+    posz_ = 0;
     step_ = 0;
     speedx_ = 0;
     speedy_ = 0;

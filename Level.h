@@ -21,11 +21,11 @@ class Level
         void enter(Room* room);
         void draw();
         void nextLevel();
+        Room* currentRoom_;
 
     protected:
         ALLEGRO_BITMAP *background_, *numbers_, *hearts_;
         Room* firstRoom_;
-        Room* currentRoom_;
         Bunny* bunny_;
         EnemyFactory* efactory_;
         ItemFactory* ifactory_;

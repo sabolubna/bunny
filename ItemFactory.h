@@ -5,6 +5,8 @@
 #include "Bunny.h"
 #include "main.h"
 
+class Level;
+
 class ItemFactory
 {
     public:
@@ -15,7 +17,7 @@ class ItemFactory
 
     protected:
         int firstItem_, lastItem_;
-        ALLEGRO_BITMAP* numbers_, *items_;
+        ALLEGRO_BITMAP* numbers_, *items_, *shots_;
         Bunny* bunny_;
 };
 
