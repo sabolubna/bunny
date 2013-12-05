@@ -5,12 +5,10 @@
 #include "Bunny.h"
 #include "main.h"
 
-class Level;
-
 class ItemFactory
 {
     public:
-        ItemFactory(Bunny* bunny);
+        ItemFactory();
         ~ItemFactory();
         Item* create(RoomType type);
         void setRange(int first, int last);
@@ -18,7 +16,7 @@ class ItemFactory
     protected:
         int firstItem_, lastItem_;
         ALLEGRO_BITMAP* numbers_, *items_, *shots_;
-        Bunny* bunny_;
+        int itemsDropped[ITEM_CNT];
 };
 
 #endif // ITEMFACTORY_H

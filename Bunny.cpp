@@ -25,10 +25,6 @@ Bunny::Bunny()
     coins_ = 3;
     hearts_ = 3;
     hp_ = 6;
-    for (int i = 0; i < ITEM_CNT; i++)
-    {
-        itemsCollected[i] = false;
-    }
     shotTime_ = 0.6;
     lastShot_ = al_get_time() - shotTime_;
     shots_ = al_load_bitmap("pics/shots.png");
@@ -39,6 +35,7 @@ Bunny::Bunny()
     shooting_ = false;
     immunityTime_ = al_get_time();
     spaceItem_ = NULL;
+    spacePicture_ = NULL;
 }
 
 Bunny::~Bunny()
@@ -57,6 +54,7 @@ void Bunny::draw()
     {
         dir = 2;
     }
+    if (posz_ > 0) jumpState_ = 3;
     int a;
     switch (jumpState_)
     {
@@ -69,12 +67,12 @@ void Bunny::draw()
     }
     if (jumpState_ >= 5)
         jumpState_ = 0;
-    al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+5, width_/2, height_/2, al_map_rgba(0,0,0,50));
+    al_draw_filled_ellipse(posx_+width_/2, posy_- height_/2+5 - posz_, width_/2, height_/2, al_map_rgba(0,0,0,50));
     if (immunityTime_ < al_get_time())
-        al_draw_scaled_bitmap(picture_,0+a*200,0+dir*392,pic_width_*4,pic_height_*4,posx_,posy_-90,pic_width_,pic_height_,0);
+        al_draw_scaled_bitmap(picture_,0+a*200,0+dir*392,pic_width_*4,pic_height_*4,posx_,posy_-90 - posz_,pic_width_,pic_height_,0);
     else
         al_draw_tinted_scaled_bitmap(picture_,al_map_rgba(200,100,100,100),0+a*200,0+dir*392,pic_width_*4,pic_height_*4,posx_,
-                                     posy_-90,pic_width_,pic_height_,0);
+                                     posy_-90 - posz_,pic_width_,pic_height_,0);
 }
 
 void Bunny::dispatchEvent(ALLEGRO_EVENT* event)
@@ -185,6 +183,16 @@ void Bunny::handleCollision(Door* door)
     if (door->fits(posx_, posy_, width_, height_) && !door->locked_ && (!door->keyNeeded_ || keys_ > 0))
     {
         atDoor_ = door->side_;
+        if (door->keyNeeded_)
+        {
+            printf("keyNeeded\n");
+            keys_--;
+            door->open();
+        }
+        if (door->type_ == BONUS)
+        {
+            hurt(1);
+        }
     }
 }
 

@@ -48,6 +48,7 @@ bool Item::handleCollision(Bunny* bunny, RoomEffect* room)
         bunny->coins_ -= price_;
         return activate(bunny, room);
     }
+    return false;
 }
 
 bool Item::lying()
@@ -110,11 +111,11 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
         case 5: // candy rush
         {
             bunny->step_ += 0.5;
-            if (bunny->step_ < 6)
+            if (bunny->step_ > 6)
                 bunny->step_ = 6;
             bunny->animationTime_ -= 0.02;
-            if (bunny->step_ < 6)
-                bunny->step_ = 6;
+            if (bunny->animationTime_ < 0.03)
+                bunny->animationTime_ = 0.03;
             break;
         }
         case 6: // bomb bag

@@ -17,7 +17,6 @@ class Item : public Element
         bool lying();
         int price_;
         int number_;
-        bool spaceItem_;
 
     protected:
         ALLEGRO_BITMAP* numbers_;

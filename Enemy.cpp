@@ -61,7 +61,7 @@ class ChasingMove : public MovingStyle
         {
             if (al_get_time() > nextDirChange_)
             {
-                nextDirChange_ = al_get_time() + 1;
+                nextDirChange_ = al_get_time() + rand()%10/10 + 1;
                 double* bunnyPos = bunny_->getPos();
                 double* enemyPos = enemy_->getPos();
                 double xdistance = bunnyPos[0] - enemyPos[0];

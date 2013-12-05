@@ -24,6 +24,14 @@ void Room::createDoor(Room* that, Side side)
     if (side < 2) side2 = side + 2;
     else side2 = side - 2;
 
+    if (type_ == BONUS || that->type_ == BONUS)
+    {
+        doors_.push_back(new Door(side, BONUS));
+        rooms_.insert(pair<int, Room*>(side, that));
+        that->doors_.push_back(new Door(side2, BONUS));
+        that->rooms_.insert(pair<int, Room*>(side2, this));
+        return;
+    }
     doors_.push_back(new Door(side, that->type_));
     rooms_.insert(pair<int, Room*>(side, that));
     that->doors_.push_back(new Door(side2, type_));
@@ -182,8 +190,11 @@ void Room::findCollisions()
                                 doors_[k]->unlock();
                             if (type_ == BOSS)
                             {
+                                printf("...\n");
                                 insert(ifactory_->create(type_));
+                                printf("...\n");
                                 portals_.push_back(new Portal());
+                                printf("...\n");
                             }
                             else
                                 insert(pfactory_->create(type_));

@@ -15,15 +15,16 @@ class Door : public Element
         void bounceFromWall(int borders[4]);
         void unlock();
         void lock();
+        void open();
         bool fits(int posx, int posy, int width, int height);
         Side side_;
         bool locked_;
         bool keyNeeded_;
         void draw();
+        RoomType type_;
 
     protected:
         void init(Side side, RoomType type);
-        RoomType type_;
         ALLEGRO_BITMAP* doorspic_;
 };
 

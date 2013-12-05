@@ -22,7 +22,10 @@ Door::Door(int num, RoomType type)
 void Door::init(Side side, RoomType type)
 {
     type_ = type;
-    keyNeeded_ = false;
+    if (type == SHOP || type == TREASURE)
+        keyNeeded_ = true;
+    else
+        keyNeeded_ = false;
     locked_ = false;
     doorspic_ = al_load_bitmap("pics/doors.png");
     al_convert_mask_to_alpha(doorspic_, al_map_rgb(255,255,255));
@@ -88,6 +91,15 @@ void Door::unlock()
 void Door::lock()
 {
     locked_ = true;
+}
+
+void Door::open()
+{
+    if (type_ == TREASURE)
+        type_ = TREASUREOPEN;
+    if (type_ == SHOP)
+        type_ = NORMAL;
+    keyNeeded_ = false;
 }
 
 bool Door::fits(int posx, int posy, int width, int height)

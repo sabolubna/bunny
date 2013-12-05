@@ -12,7 +12,7 @@ Level::Level()
     bunny_ = new Bunny();
 
     efactory_ = new EnemyFactory(bunny_);
-    ifactory_ = new ItemFactory(bunny_);
+    ifactory_ = new ItemFactory();
     pfactory_ = new PickupFactory();
 
     for (int i = 0; i < LVL_CNT; i++)
@@ -38,6 +38,7 @@ void Level::nextLevel()
         playing_ = false;
         return;
     }
+    bunny_->setPos(375, 400, 30);
     int type = rand()%LVL_CNT;
     while (usedLevels_[type])
     {
@@ -60,22 +61,92 @@ void Level::nextLevel()
     file >> lastEnemy;
     ifactory_->setRange(firstItem, lastItem);
     efactory_->setRange(firstEnemy, lastEnemy);
+    //creating floor
     firstRoom_ = new Room(bunny_, NORMAL, ifactory_, pfactory_);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
-    for (int i = 0; i < 3; i++)
+    int roomCount = 2;
+    for (int i = 0; i < roomCount; i++)
     {
         nextRoom = new Room(bunny_, NORMAL, ifactory_, pfactory_);
-        //for (int i = 0; i < 2; i++)
+        //for (int i = 0; i < 3; i++)
             //nextRoom->insert(efactory_->create());
-        nextRoom->insert(ifactory_->create(NORMAL));
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }
     nextRoom = new Room(bunny_, BOSS, ifactory_, pfactory_);
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 1; i++)
         nextRoom->insert(efactory_->create());
     currentRoom_->createDoor(nextRoom, RIGHT);
+
+    //treasure room
+    currentRoom_ = firstRoom_;
+    int treasureSite = rand()%(2*roomCount);
+    for (int i = 0; i <= treasureSite/2; i++)
+    {
+        currentRoom_ = currentRoom_->rooms_.at(RIGHT);
+    }
+    nextRoom = new Room(bunny_, TREASURE, ifactory_, pfactory_);
+    nextRoom->insert(ifactory_->create(TREASURE));
+    if (treasureSite%2 == 0)
+    {
+        currentRoom_->createDoor(nextRoom, UP);
+    }
+    else
+    {
+        currentRoom_->createDoor(nextRoom, DOWN);
+    }
+
+    //shop
+    currentRoom_ = firstRoom_;
+    int shopSite;
+    do
+    {
+        shopSite = rand()%(2*roomCount);
+    } while (shopSite == treasureSite);
+    for (int i = 0; i <= shopSite/2; i++)
+    {
+        currentRoom_ = currentRoom_->rooms_.at(RIGHT);
+    }
+    nextRoom = new Room(bunny_, SHOP, ifactory_, pfactory_);
+    nextRoom->insert(ifactory_->create(SHOP));
+    nextRoom->insert(pfactory_->create(SHOP));
+
+    if (shopSite%2 == 0)
+    {
+        currentRoom_->createDoor(nextRoom, UP);
+    }
+    else
+    {
+        currentRoom_->createDoor(nextRoom, DOWN);
+    }
+    //bonus room
+    currentRoom_ = firstRoom_;
+    int bonusSite;
+    do
+    {
+        bonusSite = rand()%(2*roomCount);
+    } while (bonusSite == treasureSite || bonusSite == shopSite);
+    for (int i = 0; i <= bonusSite/2; i++)
+    {
+        currentRoom_ = currentRoom_->rooms_.at(RIGHT);
+    }
+    nextRoom = new Room(bunny_, BONUS, ifactory_, pfactory_);
+    if (rand()%2 == 0)
+    {
+        if (rand()%4 == 0)
+            nextRoom->insert(ifactory_->create(BONUS));
+        else
+            nextRoom->insert(pfactory_->create(BONUS));
+    }
+    if (bonusSite%2 == 0)
+    {
+        currentRoom_->createDoor(nextRoom, UP);
+    }
+    else
+    {
+        currentRoom_->createDoor(nextRoom, DOWN);
+    }
     currentRoom_ = firstRoom_;
 }
 
