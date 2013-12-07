@@ -4,6 +4,7 @@
 #include "Element.h"
 #include "Bunny.h"
 #include "RoomEffect.h"
+#include "SpaceItem.h"
 
 class Item : public Element
 {

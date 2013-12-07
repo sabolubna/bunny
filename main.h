@@ -14,7 +14,7 @@ enum GameState {MENU, PLAYING, PAUSE, ABOUT};
 
 enum Side {LEFT, UP, RIGHT, DOWN};
 
-enum RoomType {NORMAL = 0, SHOP = 1, BONUS = 2, TREASUREOPEN = 3, TREASURE = 4, SECRET = 5, BOSS = 6};
+enum RoomType {NORMAL, SHOP, BONUS, TREASUREOPEN, TREASURE, SECRET, BOSS};
 
 enum PickupType {COIN, BOMB, KEY, CARROT};
 

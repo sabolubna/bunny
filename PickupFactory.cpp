@@ -18,7 +18,7 @@ Pickup* PickupFactory::create(RoomType type)
 {
     if (type == SHOP)
     {
-        return new Pickup(428, 308, rand()%4, rand()%3+1, pickups_, numbers_);
+        return new Pickup(428, 308, rand()%3+1, rand()%3+1, pickups_, numbers_);
     }
     else
         return new Pickup(rand()%665 + 50, rand()%415 + 135, rand()%4, 0, pickups_, numbers_);

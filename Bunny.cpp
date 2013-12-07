@@ -35,7 +35,6 @@ Bunny::Bunny()
     shooting_ = false;
     immunityTime_ = al_get_time();
     spaceItem_ = NULL;
-    spacePicture_ = NULL;
 }
 
 Bunny::~Bunny()
@@ -185,7 +184,6 @@ void Bunny::handleCollision(Door* door)
         atDoor_ = door->side_;
         if (door->keyNeeded_)
         {
-            printf("keyNeeded\n");
             keys_--;
             door->open();
         }

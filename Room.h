@@ -17,6 +17,7 @@
 #include "ItemFactory.h"
 #include "PickupFactory.h"
 #include "Portal.h"
+#include "Bomb.h"
 
 class Room : public RoomEffect
 {
@@ -26,6 +27,7 @@ class Room : public RoomEffect
         void collectElements();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void findCollisions();
+        void onBombExplosion(Bomb* bomb);
         void createDoor(Room* that, Side side);
         void insert(Item* item);
         void insert(Pickup* pickup);
@@ -49,6 +51,7 @@ class Room : public RoomEffect
         vector<Pickup*> pickups_;
         vector<Enemy*> enemies_;
         vector<Portal*> portals_;
+        vector<Bomb*> bombs_;
         ItemFactory* ifactory_;
         PickupFactory* pfactory_;
 

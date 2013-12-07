@@ -10,6 +10,7 @@
 #include "Door.h"
 #include "Shot.h"
 #include "Pickup.h"
+#include "SpaceItem.h"
 
 class Bunny : public Element
 {
@@ -36,8 +37,7 @@ class Bunny : public Element
         double range_;
         double animationTime_;
         double shotTime_;
-        int spaceItem_;
-        ALLEGRO_BITMAP* spacePicture_;
+        SpaceItem* spaceItem_;
 
     protected:
         double lastAnimation_;

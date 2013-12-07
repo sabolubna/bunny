@@ -5,6 +5,7 @@ class RoomEffect
 {
     public:
         virtual void newPickup(PickupType type) = 0;
+
     protected:
     private:
 };

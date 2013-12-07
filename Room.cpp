@@ -63,13 +63,32 @@ void Room::collectElements()
     {
         elements_.push_back(enemies_[i]);
     }
+    for (int i = 0; i < bombs_.size(); i++)
+    {
+        if (!bombs_[i]->exploded_)
+            elements_.push_back(bombs_[i]);
+    }
     sort(elements_.begin(), elements_.end(), compare);
 }
 
 void Room::dispatchEvent(ALLEGRO_EVENT* event)
 {
+    if (event->type == ALLEGRO_EVENT_KEY_DOWN && event->keyboard.keycode == ALLEGRO_KEY_SPACE)
+    {
+        bunny_->spaceItem_->onSpace(bunny_);
+    }
+    if (event->type == ALLEGRO_EVENT_KEY_DOWN && (event->keyboard.keycode == ALLEGRO_KEY_LSHIFT
+        || event->keyboard.keycode == ALLEGRO_KEY_RSHIFT))
+    {
+        if (bunny_->bombs_ > 0)
+        {
+            bombs_.push_back(new Bomb(bunny_->getPos()));
+            bunny_->bombs_--;
+        }
+    }
     if (event->type == ALLEGRO_EVENT_TIMER)
     {
+        // adding new shots if any appeared
         Shot* shot = bunny_->shoot();
         if (shot != NULL)
             shots_.push_back(shot);
@@ -81,6 +100,7 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
                 for (int i = 0; i < shots.size(); i++)
                     shots_.push_back(shots[i]);
         }
+        //deleting shots
         int i = 0;
         while (i < shots_.size())
         {
@@ -94,6 +114,24 @@ void Room::dispatchEvent(ALLEGRO_EVENT* event)
             else
                 i++;
         }
+        //checking if any bombs exploded or need to be deleted
+        i = 0;
+        while (i < bombs_.size())
+        {
+            if (!bombs_[i]->exploded_ && bombs_[i]->smoke())
+            {
+                onBombExplosion(bombs_[i]);
+            }
+            if (bombs_[i]->exploded_ && !bombs_[i]->smoke())
+            {
+                Bomb* toDelete = bombs_[i];
+                bombs_.erase(bombs_.begin()+i);
+                delete toDelete;
+                i--;
+            }
+            i++;
+        }
+        //handling collisions
         findCollisions();
         collectElements();
         for (int i = 0; i < elements_.size(); i++)
@@ -181,20 +219,18 @@ void Room::findCollisions()
             {
                 if (enemies_[j]->collidesWith(shots_[i]))
                 {
-                    if (enemies_[j]->handleCollision(shots_[i]))
+                    if (enemies_[j]->hurt(shots_[i]->damage_))
                     {
                         enemies_.erase(enemies_.begin()+j);
                         if (enemies_.size() == 0)
                         {
+                            //if last enemy killed
                             for (int k = 0; k < doors_.size(); k++)
                                 doors_[k]->unlock();
                             if (type_ == BOSS)
                             {
-                                printf("...\n");
                                 insert(ifactory_->create(type_));
-                                printf("...\n");
                                 portals_.push_back(new Portal());
-                                printf("...\n");
                             }
                             else
                                 insert(pfactory_->create(type_));
@@ -221,6 +257,54 @@ void Room::findCollisions()
             portals_[i]->locked_ = false;
     }
     bunny_->bounceFromWall(borders_);
+}
+
+void Room::onBombExplosion(Bomb* bomb)
+{
+    //opening doors
+    if (type_ != BOSS)
+    {
+        for (int j = 0; j < doors_.size(); j++)
+        {
+            if (bomb->inRange(doors_[j]))
+            {
+                doors_[j]->unlock();
+            }
+        }
+    }
+    //hurting bunny
+    if (bomb->inRange(bunny_))
+    {
+        bunny_->hurt(2);
+    }
+    //hurting enemies
+    int j = 0;
+    while (j < enemies_.size())
+    {
+        if (bomb->inRange(enemies_[j]))
+        {
+            if (enemies_[j]->hurt(bomb->damage_))
+            {
+                enemies_.erase(enemies_.begin()+j);
+                j--;
+                //if last killed
+                if (enemies_.size() == 0)
+                {
+                    for (int k = 0; k < doors_.size(); k++)
+                        doors_[k]->unlock();
+                    if (type_ == BOSS)
+                    {
+                        insert(ifactory_->create(type_));
+                        portals_.push_back(new Portal());
+                    }
+                    else
+                        insert(pfactory_->create(type_));
+                }
+            }
+        }
+        j++;
+    }
+    bomb->exploded_ = true;
 }
 
 void Room::insert(Item* item)
@@ -262,8 +346,8 @@ void Room::leave()
 
 void Room::draw()
 {
-    if (bunny_->spacePicture_ != NULL)
-        al_draw_bitmap(bunny_->spacePicture_, 5, 5, 0);
+    if (bunny_->spaceItem_ != NULL)
+        bunny_->spaceItem_->draw();
     for (int i = 0; i < doors_.size(); i++)
     {
         doors_[i]->draw();
@@ -275,4 +359,9 @@ void Room::draw()
     collectElements();
     for (int i = 0; i < elements_.size(); i++)
         elements_[i]->draw();
+    for (int i = 0; i < bombs_.size(); i++)
+    {
+        if (bombs_[i]->smoke())
+            bombs_[i]->draw();
+    }
 }

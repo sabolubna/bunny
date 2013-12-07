@@ -26,7 +26,7 @@ class RandomMove : public MovingStyle
         void freeze()
         {
             enemy_->setSpeed(0, 0);
-            nextDirChange_ = al_get_time() + rand()%10/10+1;
+            nextDirChange_ = al_get_time() + rand()%10/10.0+1;
         }
         void bounceFromWall(Side side)
         {
@@ -55,13 +55,13 @@ class ChasingMove : public MovingStyle
         {
             enemy_ = enemy;
             bunny_ = bunny;
-            nextDirChange_ = al_get_time()+rand()%10/10+2;
+            nextDirChange_ = al_get_time()+rand()%10/10.0+2;
         }
         void move()
         {
             if (al_get_time() > nextDirChange_)
             {
-                nextDirChange_ = al_get_time() + rand()%10/10 + 1;
+                nextDirChange_ = al_get_time() + rand()%10/10.0 + 1;
                 double* bunnyPos = bunny_->getPos();
                 double* enemyPos = enemy_->getPos();
                 double xdistance = bunnyPos[0] - enemyPos[0];
@@ -72,7 +72,7 @@ class ChasingMove : public MovingStyle
         void freeze()
         {
             enemy_->setSpeed(0, 0);
-            nextDirChange_ = al_get_time() + rand()%10/10+1;
+            nextDirChange_ = al_get_time() + rand()%10/10.0+1;
         }
         void bounceFromWall(Side side)
         {
@@ -93,12 +93,12 @@ class FourShots : public ShootingStyle
             enemy_ = enemy;
             range_ = range;
             picture_ = picture;
-            lastShot_ = al_get_time() + rand()%10/10;
+            lastShot_ = al_get_time() + rand()%10/10.0;
             shotTime_ = shotTime;
         }
         void freeze()
         {
-            lastShot_ = al_get_time() + rand()%10/10;
+            lastShot_ = al_get_time() + rand()%10/10.0;
         }
         vector<Shot*> shoot()
         {
@@ -131,13 +131,13 @@ class DirectedShots : public ShootingStyle
             enemy_ = enemy;
             range_ = range;
             picture_ = picture;
-            lastShot_ = al_get_time() + rand()%10/10;
+            lastShot_ = al_get_time() + rand()%10/10.0;
             shotTime_ = shotTime;
             bunny_ = bunny;
         }
         void freeze()
         {
-            lastShot_ = al_get_time() + rand()%10/10;
+            lastShot_ = al_get_time() + rand()%10/10.0;
         }
         vector<Shot*> shoot()
         {
@@ -173,12 +173,12 @@ class FiveRandomShots : public ShootingStyle
             enemy_ = enemy;
             range_ = range;
             picture_ = picture;
-            lastShot_ = al_get_time() + rand()%10/10;
+            lastShot_ = al_get_time() + rand()%10/10.0;
             shotTime_ = shotTime;
         }
         void freeze()
         {
-            lastShot_ = al_get_time() + rand()%10/10;
+            lastShot_ = al_get_time() + rand()%10/10.0;
         }
         vector<Shot*> shoot()
         {
@@ -193,7 +193,7 @@ class FiveRandomShots : public ShootingStyle
             {
                 double speedx = rand()%200 - 100;
                 double speedy = rand()%200 - 100;
-                int range = range_ * (rand()%10 + 1)/10;
+                int range = range_ * (rand()%10 + 1)/10.0;
                 shots.push_back(new Shot(picture_, enemyPos[0] + enemySize[0]/2 - 10, enemyPos[1] + 1, enemySize[1]/2, speedx, speedy,
                                          range, true, 1));
             }
@@ -318,9 +318,9 @@ void Enemy::bounceFromWall(int borders[4])
         movingStyle_->bounceFromWall(UP);
 }
 
-int Enemy::handleCollision(Shot* shot)
+bool Enemy::hurt(int damage)
 {
-    hp_ -= shot->damage_;
+    hp_ -= damage;
     lastHurt_ = al_get_time();
     return hp_ <= 0;
 }

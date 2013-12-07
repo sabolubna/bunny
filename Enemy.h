@@ -4,7 +4,6 @@
 #include "Element.h"
 #include "MovingStyle.h"
 #include "ShootingStyle.h"
-#include "Shot.h"
 #include "Bunny.h"
 #include <fstream>
 #include <time.h>
@@ -18,12 +17,12 @@ class Enemy : public Element
         ~Enemy();
         void dispatchEvent(ALLEGRO_EVENT* event);
         void bounceFromWall(int borders[4]);
-        int handleCollision(Shot* shot);
         void draw();
         void move();
         vector<Shot*> shoot();
         double* getPos();
         void freeze();
+        bool hurt(int damage);
 
     protected:
         int animationState_;

@@ -83,9 +83,9 @@ Game::Game()
     mainmenu_ = new Menu(this, "pics/mainmenu.png", buttons);
 
     buttons.clear();
-    buttons.push_back(Button(new ResumeClickHandler(this), 250, 250, 299, 54, 0, 162));
-    buttons.push_back(Button(new EndGameClickHandler(this), 250, 350, 299, 54, 0, 108));
-    pausemenu_ = new Menu(this, "pics/level02.bmp", buttons);
+    buttons.push_back(Button(new ResumeClickHandler(this), 250, 200, 299, 54, 0, 162));
+    buttons.push_back(Button(new EndGameClickHandler(this), 250, 300, 299, 54, 0, 108));
+    pausemenu_ = new Menu(this, "pics/pausemenu.bmp", buttons);
 
     buttons.clear();
     buttons.push_back(Button(new BackClickHandler(this), 550, 470, 132, 54, 0, 216));

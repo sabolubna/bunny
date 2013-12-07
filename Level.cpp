@@ -65,17 +65,18 @@ void Level::nextLevel()
     firstRoom_ = new Room(bunny_, NORMAL, ifactory_, pfactory_);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
-    int roomCount = 2;
+    int roomCount = 4;
     for (int i = 0; i < roomCount; i++)
     {
         nextRoom = new Room(bunny_, NORMAL, ifactory_, pfactory_);
-        //for (int i = 0; i < 3; i++)
-            //nextRoom->insert(efactory_->create());
+        int eCount = rand()%3+1;
+        for (int i = 0; i < eCount; i++)
+            nextRoom->insert(efactory_->create());
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }
     nextRoom = new Room(bunny_, BOSS, ifactory_, pfactory_);
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 6; i++)
         nextRoom->insert(efactory_->create());
     currentRoom_->createDoor(nextRoom, RIGHT);
 

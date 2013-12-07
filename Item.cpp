@@ -60,25 +60,20 @@ bool Item::pickUpSpaceItem(Bunny* bunny)
 {
     if (bunny->spaceItem_ != NULL)
     {
-        int num = number_;
-        number_ = bunny->spaceItem_;
-        bunny->spaceItem_ = num;
-
         ALLEGRO_BITMAP* pic;
         pic = picture_;
-        picture_ = bunny->spacePicture_;
-        bunny->spacePicture_ = pic;
-        posz_ = 30;
+        int num = number_;
+        picture_ = bunny->spaceItem_->picture_;
+        number_ = bunny->spaceItem_->number_;
+        bunny->spaceItem_ = new SpaceItem(pic, num);
         return false;
     }
-    bunny->spaceItem_ = number_;
-    bunny->spacePicture_ = picture_;
+    bunny->spaceItem_ = new SpaceItem(picture_, number_);
     return true;
 }
 
 bool Item::activate(Bunny* bunny, RoomEffect* room)
 {
-    double tmp;
     switch (number_)
     {
         case 0: //rabbits heart
@@ -96,7 +91,7 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
         }
         case 2: // plonaca kapucha
         {
-            bunny->shotPicture_ = al_create_sub_bitmap(shots_,60,0,20,20);
+            bunny->shotPicture_ = al_create_sub_bitmap(shots_,80,0,20,20);
             bunny->range_ += 200;
             break;
         }
@@ -151,7 +146,7 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
         }
         //bonus items
         //pokemon level
-        case 15: //lvlup candy
+        case 11: //lvlup candy
         {
             bunny->damage_ += 10;
             if (bunny->damage_ > 60)
@@ -163,7 +158,7 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
             if (bunny->range_ > 700)
                 bunny->range_ = 700;
             bunny->step_ += 0.5;
-            if (bunny->step_ < 6)
+            if (bunny->step_ > 6)
                 bunny->step_ = 6;
             bunny->hearts_++;
             if (bunny->hearts_ > 6)
@@ -173,16 +168,16 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
             }
             break;
         }
-        case 16: // pokeball
+        case 12: // pokeball
         {
             bunny->shotPicture_ = al_create_sub_bitmap(shots_,60,0,20,20);
             break;
         }
-        case 17: // squirtle's glasses
+        case 13: // squirtle's glasses
         {
             return pickUpSpaceItem(bunny);
         }
-        case 18: // ash cap GOTTA CATCH EM ALL
+        case 14: // ash cap GOTTA CATCH EM ALL
         {
             room->newPickup(CARROT);
             room->newPickup(BOMB);
