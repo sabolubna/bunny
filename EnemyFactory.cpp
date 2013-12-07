@@ -48,9 +48,20 @@ bool EnemyFactory::allowedPos(Enemy* enemy)
     return true;
 }
 
-Enemy* EnemyFactory::create()
+Enemy* EnemyFactory::create(RoomType room)
 {
-    Enemy* enemy = new Enemy(rand()%700+50, rand()%450+100, rand()%(lastEnemy_ - firstEnemy_ + 1) + firstEnemy_,
+    if (room == BOSS)
+    {
+        Enemy* enemy = new Enemy(rand()%700+50, rand()%450+100, lastEnemy_, enemies_, shots_, bunny_);
+        while (!allowedPos(enemy))
+        {
+            int x = rand()%700+50;
+            int y = rand()%450+100;
+            enemy->setPos(x, y, 20);
+        }
+        return enemy;
+    }
+    Enemy* enemy = new Enemy(rand()%700+50, rand()%450+100, rand()%(lastEnemy_ - firstEnemy_) + firstEnemy_,
                              enemies_, shots_, bunny_);
     while (!allowedPos(enemy))
     {

@@ -20,9 +20,9 @@ class Enemy : public Element
         void draw();
         void move();
         vector<Shot*> shoot();
-        double* getPos();
         void freeze();
         bool hurt(int damage);
+        double* getSpeed();
 
     protected:
         int animationState_;
@@ -32,6 +32,7 @@ class Enemy : public Element
         ShootingStyle* shootingStyle_;
         int hp_;
         double lastHurt_;
+        int stateCount_;
 
     private:
 };

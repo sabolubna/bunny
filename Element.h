@@ -34,7 +34,7 @@ class Element
         double posx_, posz_;
         int pic_height_, pic_width_, height_, width_;
         ALLEGRO_BITMAP *picture_;
-        int speedx_, speedy_;
+        double speedx_, speedy_;
 
     private:
 };

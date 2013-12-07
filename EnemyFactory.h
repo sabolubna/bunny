@@ -8,7 +8,7 @@ class EnemyFactory
     public:
         EnemyFactory(Bunny* bunny);
         ~EnemyFactory();
-        Enemy* create();
+        Enemy* create(RoomType room);
         void setRange(int first, int last);
 
     protected:
