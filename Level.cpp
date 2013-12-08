@@ -6,11 +6,9 @@ Level::Level()
 
     numbers_ = al_load_bitmap("pics/numbers.bmp");
     al_convert_mask_to_alpha(numbers_, al_map_rgb(0, 0, 0));
-
-    background_ = al_load_bitmap("pics/level01.bmp");
     hearts_ = al_load_bitmap("pics/hearts.bmp");
     bunny_ = new Bunny();
-
+    spaceItem_ = new SpaceItem(NULL, 0);
     efactory_ = new EnemyFactory(bunny_);
     ifactory_ = new ItemFactory();
     pfactory_ = new PickupFactory();
@@ -31,7 +29,6 @@ Level::~Level()
 
 void Level::nextLevel()
 {
-    printf("nextLevel\n");
     if (levelsPlayed_ == LVL_CNT)
     {
         printf("win\n");
@@ -59,24 +56,27 @@ void Level::nextLevel()
     file >> lastItem;
     file >> firstEnemy;
     file >> lastEnemy;
+    string bitmap;
+    file >> bitmap;
     ifactory_->setRange(firstItem, lastItem);
     efactory_->setRange(firstEnemy, lastEnemy);
+    background_ = al_load_bitmap((char*)bitmap.c_str());
     //creating floor
-    firstRoom_ = new Room(bunny_, NORMAL, ifactory_, pfactory_);
+    firstRoom_ = new Room(bunny_, spaceItem_, NORMAL, ifactory_, pfactory_);
     currentRoom_ = firstRoom_;
     Room* nextRoom;
     int roomCount = 4;
     for (int i = 0; i < roomCount; i++)
     {
-        nextRoom = new Room(bunny_, NORMAL, ifactory_, pfactory_);
+        nextRoom = new Room(bunny_, spaceItem_, NORMAL, ifactory_, pfactory_);
         int eCount = 2 + rand()%2;
-        for (int i = 0; i < eCount; i++)
-            nextRoom->insert(efactory_->create(NORMAL));
+        //for (int i = 0; i < eCount; i++)
+            //nextRoom->insert(efactory_->create(NORMAL));
         currentRoom_->createDoor(nextRoom, RIGHT);
         currentRoom_ = nextRoom;
     }
     //boss room
-    nextRoom = new Room(bunny_, BOSS, ifactory_, pfactory_);
+    nextRoom = new Room(bunny_, spaceItem_, BOSS, ifactory_, pfactory_);
     nextRoom->insert(efactory_->create(BOSS));
     currentRoom_->createDoor(nextRoom, RIGHT);
 
@@ -87,7 +87,7 @@ void Level::nextLevel()
     {
         currentRoom_ = currentRoom_->rooms_.at(RIGHT);
     }
-    nextRoom = new Room(bunny_, TREASURE, ifactory_, pfactory_);
+    nextRoom = new Room(bunny_, spaceItem_, TREASURE, ifactory_, pfactory_);
     nextRoom->insert(ifactory_->create(TREASURE));
     if (treasureSite%2 == 0)
     {
@@ -109,9 +109,9 @@ void Level::nextLevel()
     {
         currentRoom_ = currentRoom_->rooms_.at(RIGHT);
     }
-    nextRoom = new Room(bunny_, SHOP, ifactory_, pfactory_);
+    nextRoom = new Room(bunny_, spaceItem_, SHOP, ifactory_, pfactory_);
     nextRoom->insert(ifactory_->create(SHOP));
-    nextRoom->insert(pfactory_->create(SHOP));
+    nextRoom->newPickup();
 
     if (shopSite%2 == 0)
     {
@@ -132,13 +132,13 @@ void Level::nextLevel()
     {
         currentRoom_ = currentRoom_->rooms_.at(RIGHT);
     }
-    nextRoom = new Room(bunny_, BONUS, ifactory_, pfactory_);
+    nextRoom = new Room(bunny_, spaceItem_, BONUS, ifactory_, pfactory_);
     if (rand()%2 == 0)
     {
         if (rand()%4 == 0)
             nextRoom->insert(ifactory_->create(BONUS));
         else
-            nextRoom->insert(pfactory_->create(BONUS));
+            nextRoom->newPickup();
     }
     if (bonusSite%2 == 0)
     {
@@ -161,8 +161,18 @@ void Level::dispatchEvent(ALLEGRO_EVENT* event)
         }
         if (bunny_->atPortal_)
         {
+            int z = 24;
+            while (z > 0)
+            {
+                bunny_->setPos(375, 225, z);
+                draw();
+                al_flip_display();
+                al_rest(1/60.0);
+                z--;
+            }
             bunny_->atPortal_ = false;
             nextLevel();
+            return;
         }
     }
     else if (event->type == ALLEGRO_EVENT_KEY_DOWN

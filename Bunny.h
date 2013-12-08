@@ -10,7 +10,6 @@
 #include "Door.h"
 #include "Shot.h"
 #include "Pickup.h"
-#include "SpaceItem.h"
 
 class Bunny : public Element
 {
@@ -37,7 +36,8 @@ class Bunny : public Element
         double range_;
         double animationTime_;
         double shotTime_;
-        SpaceItem* spaceItem_;
+        int battery_;
+        bool boots_;
 
     protected:
         double lastAnimation_;

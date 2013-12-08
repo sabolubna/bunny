@@ -22,7 +22,7 @@
 class Room : public RoomEffect
 {
     public:
-        Room(Bunny* bunny, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory);
+        Room(Bunny* bunny, SpaceItem* spaceItem, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory);
         ~Room();
         void collectElements();
         void dispatchEvent(ALLEGRO_EVENT* event);
@@ -32,13 +32,16 @@ class Room : public RoomEffect
         void insert(Item* item);
         void insert(Pickup* pickup);
         void newPickup(PickupType type);
+        void newPickup();
         void insert(Enemy* enemy);
         void leave();
         void enter();
         void draw();
+        void oneRoomEffect(Effect effect, double change);
         int bunnyAtDoor_;
         map<int, Room*> rooms_;
         RoomType type_;
+        double oneRoomEffect_[4];
 
     protected:
         int borders_[4];
@@ -54,6 +57,7 @@ class Room : public RoomEffect
         vector<Bomb*> bombs_;
         ItemFactory* ifactory_;
         PickupFactory* pfactory_;
+        SpaceItem* spaceItem_;
 
     private:
 };

@@ -34,7 +34,8 @@ Bunny::Bunny()
     damage_ = 10;
     shooting_ = false;
     immunityTime_ = al_get_time();
-    spaceItem_ = NULL;
+    battery_ = 0;
+    boots_ = false;
 }
 
 Bunny::~Bunny()
@@ -187,7 +188,7 @@ void Bunny::handleCollision(Door* door)
             keys_--;
             door->open();
         }
-        if (door->type_ == BONUS)
+        if (door->type_ == BONUS && !boots_)
         {
             hurt(1);
         }

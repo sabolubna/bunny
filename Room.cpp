@@ -1,6 +1,6 @@
 #include "Room.h"
 
-Room::Room(Bunny* bunny, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory)
+Room::Room(Bunny* bunny, SpaceItem* spaceItem, RoomType type, ItemFactory* ifactory, PickupFactory* pfactory)
 {
     type_ = type;
     borders_[UP] = 100;
@@ -8,8 +8,13 @@ Room::Room(Bunny* bunny, RoomType type, ItemFactory* ifactory, PickupFactory* pf
     borders_[RIGHT] = 750;
     borders_[DOWN] = 550;
     bunny_ = bunny;
+    spaceItem_ = spaceItem;
     ifactory_ = ifactory;
     pfactory_ = pfactory;
+    for (int i = 0; i < 4; i++)
+    {
+        oneRoomEffect_[i] = 0;
+    }
 }
 
 Room::~Room()
@@ -45,6 +50,7 @@ bool compare(Element* x, Element* y)
 
 void Room::collectElements()
 {
+    //collecting elements that need to be drawn in right order
     elements_.clear();
     elements_.push_back(bunny_);
     for (int i = 0; i < items_.size(); i++)
@@ -73,14 +79,14 @@ void Room::collectElements()
 
 void Room::dispatchEvent(ALLEGRO_EVENT* event)
 {
-    if (event->type == ALLEGRO_EVENT_KEY_DOWN && event->keyboard.keycode == ALLEGRO_KEY_SPACE)
+    if (event->type == ALLEGRO_EVENT_KEY_DOWN)
     {
-        bunny_->spaceItem_->onSpace(bunny_);
-    }
-    if (event->type == ALLEGRO_EVENT_KEY_DOWN && (event->keyboard.keycode == ALLEGRO_KEY_LSHIFT
-        || event->keyboard.keycode == ALLEGRO_KEY_RSHIFT))
-    {
-        if (bunny_->bombs_ > 0)
+        //use spaceitem
+        if (event->keyboard.keycode == ALLEGRO_KEY_SPACE && spaceItem_->number_ > 0)
+            spaceItem_->onSpace(this, bunny_);
+        //place new bomb
+        if ((event->keyboard.keycode == ALLEGRO_KEY_LSHIFT || event->keyboard.keycode == ALLEGRO_KEY_RSHIFT)
+            && bunny_->bombs_ > 0)
         {
             bombs_.push_back(new Bomb(bunny_->getPos()));
             bunny_->bombs_--;
@@ -161,7 +167,7 @@ void Room::findCollisions()
     {
         if (bunny_->collidesWith(items_[i]) && items_[i]->lying())
         {
-            if (items_[i]->handleCollision(bunny_, this))
+            if (items_[i]->handleCollision(bunny_, this, spaceItem_))
             {
                 Item* toDelete = items_[i];
                 items_.erase(items_.begin()+i);
@@ -225,6 +231,7 @@ void Room::findCollisions()
                         if (enemies_.size() == 0)
                         {
                             //if last enemy killed
+                            spaceItem_->roomsLeft_--;
                             for (int k = 0; k < doors_.size(); k++)
                                 doors_[k]->unlock();
                             if (type_ == BOSS)
@@ -233,7 +240,7 @@ void Room::findCollisions()
                                 portals_.push_back(new Portal());
                             }
                             else
-                                insert(pfactory_->create(type_));
+                                newPickup();
                         }
                     }
                     shots_.erase(shots_.begin()+i);
@@ -288,6 +295,7 @@ void Room::onBombExplosion(Bomb* bomb)
                 enemies_.erase(enemies_.begin()+j);
                 j--;
                 //if last killed
+                spaceItem_->roomsLeft_--;
                 if (enemies_.size() == 0)
                 {
                     for (int k = 0; k < doors_.size(); k++)
@@ -298,7 +306,7 @@ void Room::onBombExplosion(Bomb* bomb)
                         portals_.push_back(new Portal());
                     }
                     else
-                        insert(pfactory_->create(type_));
+                        newPickup();
                 }
             }
         }
@@ -312,14 +320,14 @@ void Room::insert(Item* item)
     items_.push_back(item);
 }
 
-void Room::insert(Pickup* pickup)
-{
-    pickups_.push_back(pickup);
-}
-
 void Room::newPickup(PickupType ptype)
 {
     pickups_.push_back(pfactory_->create(type_, ptype));
+}
+
+void Room::newPickup()
+{
+    pickups_.push_back(pfactory_->create(type_));
 }
 
 void Room::insert(Enemy* enemy)
@@ -342,12 +350,16 @@ void Room::enter()
 void Room::leave()
 {
     shots_.clear();
+    bunny_->damage_ -= oneRoomEffect_[DAMAGE];
+    bunny_->shotTime_ -= oneRoomEffect_[SHOTTIME];
+    bunny_->step_ -= oneRoomEffect_[STEP];
+    bunny_->range_ -= oneRoomEffect_[RANGE];
 }
 
 void Room::draw()
 {
-    if (bunny_->spaceItem_ != NULL)
-        bunny_->spaceItem_->draw();
+    if (spaceItem_->number_ > 0)
+        spaceItem_->draw();
     for (int i = 0; i < doors_.size(); i++)
     {
         doors_[i]->draw();
@@ -364,4 +376,9 @@ void Room::draw()
         if (bombs_[i]->smoke())
             bombs_[i]->draw();
     }
+}
+
+void Room::oneRoomEffect(Effect effect, double change)
+{
+    oneRoomEffect_[effect] = change;
 }

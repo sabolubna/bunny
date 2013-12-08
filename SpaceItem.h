@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-class Bunny;
+#include "RoomEffect.h"
+#include "Bunny.h"
 
 class SpaceItem
 {
@@ -12,12 +13,13 @@ class SpaceItem
         SpaceItem(ALLEGRO_BITMAP* picture, int num);
         ~SpaceItem();
         void draw();
-        void onSpace(Bunny* bunny);
+        void onSpace(RoomEffect* room, Bunny* bunny);
         ALLEGRO_BITMAP* picture_;
         int number_;
         int roomsLeft_;
 
     protected:
+        ALLEGRO_BITMAP* numbers_;
     private:
 };
 

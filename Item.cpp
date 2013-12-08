@@ -14,6 +14,7 @@ Item::Item(int x, int y, int num, int price, ALLEGRO_BITMAP* picture, ALLEGRO_BI
     picture_ = picture;
     numbers_ = numbers;
     shots_ = shots;
+    roomsLeft_ = 0;
 }
 
 Item::~Item()
@@ -40,13 +41,13 @@ void Item::draw()
     }
 }
 
-bool Item::handleCollision(Bunny* bunny, RoomEffect* room)
+bool Item::handleCollision(Bunny* bunny, RoomEffect* room, SpaceItem* spaceItem)
 {
     if (bunny->coins_ >= price_)
     {
         bunny->itemsCollected[number_] = true;
         bunny->coins_ -= price_;
-        return activate(bunny, room);
+        return activate(bunny, room, spaceItem);
     }
     return false;
 }
@@ -56,23 +57,29 @@ bool Item::lying()
     return posz_ == 0;
 }
 
-bool Item::pickUpSpaceItem(Bunny* bunny)
+bool Item::pickUpSpaceItem(SpaceItem* spaceItem)
 {
-    if (bunny->spaceItem_ != NULL)
+    if (spaceItem->number_ > 0)
     {
         ALLEGRO_BITMAP* pic;
         pic = picture_;
+        picture_ = spaceItem->picture_;
+        spaceItem->picture_ = pic;
         int num = number_;
-        picture_ = bunny->spaceItem_->picture_;
-        number_ = bunny->spaceItem_->number_;
-        bunny->spaceItem_ = new SpaceItem(pic, num);
+        number_ = spaceItem->number_;
+        spaceItem->number_ = num;
+        int left = roomsLeft_;
+        roomsLeft_ = spaceItem->roomsLeft_;
+        spaceItem->roomsLeft_ = left;
+        posz_ = 20;
         return false;
     }
-    bunny->spaceItem_ = new SpaceItem(picture_, number_);
+    spaceItem->picture_ = picture_;
+    spaceItem->number_ = number_;
     return true;
 }
 
-bool Item::activate(Bunny* bunny, RoomEffect* room)
+bool Item::activate(Bunny* bunny, RoomEffect* room, SpaceItem* spaceItem)
 {
     switch (number_)
     {
@@ -97,11 +104,11 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
         }
         case 3: // worek marchewek
         {
-            return pickUpSpaceItem(bunny);
+            return pickUpSpaceItem(spaceItem);
         }
         case 4: // mystery worek
         {
-            return pickUpSpaceItem(bunny);
+            return pickUpSpaceItem(spaceItem);
         }
         case 5: // candy rush
         {
@@ -128,23 +135,22 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
             break;
         }
         case 8: //lasergun
-        {/*
-            bunny->shottype = 1;
-            bunny->shotfreq = 0.6;
-            bunny->range = 700;*/
+        {
+            bunny->damage_ += 10;
+            if (bunny->damage_ > 60)
+                bunny->damage_ = 60;
             break;
         }
         case 9: //duracell
-        {/*
-            bunny->battery += 2;*/
+        {
+            bunny->battery_ += 2;
             break;
         }
-        case 10: // buciki
-        {/*
-            bunny->boots += 1;*/
+        case 10: // boots
+        {
+            bunny->boots_ = true;
             break;
         }
-        //bonus items
         //pokemon level
         case 11: //lvlup candy
         {
@@ -175,7 +181,7 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
         }
         case 13: // squirtle's glasses
         {
-            return pickUpSpaceItem(bunny);
+            return pickUpSpaceItem(spaceItem);
         }
         case 14: // ash cap GOTTA CATCH EM ALL
         {
@@ -184,14 +190,6 @@ bool Item::activate(Bunny* bunny, RoomEffect* room)
             room->newPickup(KEY);
             room->newPickup(COIN);
             break;
-        }
-        case 51: // niebieski portalgun
-        {
-            return pickUpSpaceItem(bunny);
-        }
-        case 52: //pomaranczowy portal gun
-        {
-            return pickUpSpaceItem(bunny);
         }
     }
     return true;

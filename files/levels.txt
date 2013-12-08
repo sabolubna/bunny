@@ -1,2 +1,2 @@
-11 12 0 4
-13 14 0 4
+11 12 0 4 pics/level01.bmp
+13 14 0 4 pics/level02.bmp

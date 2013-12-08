@@ -18,6 +18,8 @@ enum RoomType {NORMAL, SHOP, BONUS, TREASUREOPEN, TREASURE, SECRET, BOSS};
 
 enum PickupType {COIN, BOMB, KEY, CARROT};
 
+enum Effect {DAMAGE, SHOTTIME, STEP, RANGE};
+
 using namespace std;
 
 #endif // MAIN_H_INCLUDED

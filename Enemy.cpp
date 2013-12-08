@@ -115,6 +115,8 @@ class PikachuMove : public MovingStyle
         }
         void freeze()
         {
+            currentMove_ = randomMove_;
+            nextStyleChange_ = al_get_time() + 5;
             currentMove_->freeze();
         }
         void bounceFromWall(Side side)

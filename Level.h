@@ -27,6 +27,7 @@ class Level
         ALLEGRO_BITMAP *background_, *numbers_, *hearts_;
         Room* firstRoom_;
         Bunny* bunny_;
+        SpaceItem* spaceItem_;
         EnemyFactory* efactory_;
         ItemFactory* ifactory_;
         PickupFactory* pfactory_;

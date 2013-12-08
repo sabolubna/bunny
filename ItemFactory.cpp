@@ -79,7 +79,6 @@ Item* ItemFactory::create(RoomType type)
     }
     else
     {
-
         do
         {
             r = rand()%(lastItem_ - firstItem_ + 1) + firstItem_;

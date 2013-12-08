@@ -11,10 +11,10 @@ class Item : public Element
     public:
         Item(int x, int y, int num, int price, ALLEGRO_BITMAP* items, ALLEGRO_BITMAP* numbers, ALLEGRO_BITMAP* shots_);
         ~Item();
-        bool activate(Bunny* bunny, RoomEffect* room);
+        bool activate(Bunny* bunny, RoomEffect* room, SpaceItem* spaceItem);
         void draw();
-        bool handleCollision(Bunny* bunny, RoomEffect* room);
-        bool pickUpSpaceItem(Bunny* bunny);
+        bool handleCollision(Bunny* bunny, RoomEffect* room, SpaceItem* spaceItem);
+        bool pickUpSpaceItem(SpaceItem* spaceItem);
         bool lying();
         int price_;
         int number_;
@@ -22,6 +22,7 @@ class Item : public Element
     protected:
         ALLEGRO_BITMAP* numbers_;
         ALLEGRO_BITMAP* shots_;
+        int roomsLeft_;
     private:
 };
 
